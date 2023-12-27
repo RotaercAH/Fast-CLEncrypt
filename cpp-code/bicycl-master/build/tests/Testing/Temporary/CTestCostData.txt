@@ -1,0 +1,10 @@
+test_gmp_extras 50 0.00766093
+test_qfi 50 0.00918137
+test_CL_HSMqk 2 85.2412
+test_CL_HSM2k 2 34.8828
+test_Paillier 2 11.1098
+test_Joye_Libert 2 3.30399
+test_ec 2 0.270727
+test_threshold_ECDSA 2 18.8373
+test_encrypt 45 0.000199439
+---
