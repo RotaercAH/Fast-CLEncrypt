@@ -1,4 +1,0 @@
-test_gmp_extras 82 0.00252107
-test_qfi 82 0.00520289
-test_encrypt 52 0.000436859
----

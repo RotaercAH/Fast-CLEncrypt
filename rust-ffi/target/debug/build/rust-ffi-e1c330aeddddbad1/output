@@ -1,2 +1,0 @@
-cargo:rustc-link-search=native=/home/xlong/rust-ffi/rust-ffi
-cargo:rustc-link-search=native=/usr/include

@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -Wall -Wextra -DNDEBUG CMakeFiles/test_qfi.dir/test_qfi.cpp.o -o test_qfi  /usr/lib/x86_64-linux-gnu/libgmp.so /usr/lib/x86_64-linux-gnu/libgmpxx.so /usr/lib/x86_64-linux-gnu/libcrypto.so 
