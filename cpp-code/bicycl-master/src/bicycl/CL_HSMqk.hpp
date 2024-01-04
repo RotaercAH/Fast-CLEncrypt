@@ -25,11 +25,12 @@
 #include <tuple>
 #include <stdexcept>
 
-#include "bicycl/openssl_wrapper.hpp"
-#include "bicycl/gmp_extras.hpp"
-#include "bicycl/qfi.hpp"
-#include "bicycl/CL_HSM_utils.hpp"
-#include "bicycl/seclevel.hpp"
+#include "../bicycl/openssl_wrapper.hpp"
+#include "../bicycl/gmp_extras.hpp"
+#include "../bicycl/qfi.hpp"
+// #include "bicycl/CL_HSM_utils.hpp"
+#include "../bicycl/seclevel.hpp"
+#include "../bicycl/CL_HSM_utils.hpp"
 
 namespace BICYCL
 {
@@ -179,6 +180,9 @@ namespace BICYCL
       const Mpz & DeltaK () const;
       /** Return \f$\Delta = -pq^{2k+1}\f$. */
       const Mpz & Delta () const;
+      /** Return fud_factor**/
+      const Mpz & fud_factor () const;
+
       /**
        * Return \f$\ClDeltaK\f$: the class group of discriminant
        * \f$\Delta_K = -pq\f$.
@@ -227,6 +231,8 @@ namespace BICYCL
        * @name Public methods implementing the cryptographic functionalities
        *@{
        */
+      /** Generate a secret key from mpz*/
+      SecretKey keygen (Mpz &sk) const;
       /** Generate a random secret key */
       SecretKey keygen (RandGen &randgen) const;
       /** Compute the public key associated to a secret key */

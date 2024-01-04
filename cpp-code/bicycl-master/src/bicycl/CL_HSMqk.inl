@@ -272,6 +272,13 @@ const Mpz & CL_HSMqk::M () const
 
 /* */
 inline
+const Mpz & CL_HSMqk::fud_factor () const
+{
+  return fud_factor_;
+}
+
+/* */
+inline
 const ClassGroup & CL_HSMqk::Cl_DeltaK () const
 {
   return Cl_DeltaK_;
@@ -593,6 +600,13 @@ inline
 CL_HSMqk::SecretKey CL_HSMqk::keygen (RandGen &randgen) const
 {
   return SecretKey (*this, randgen);
+}
+
+/* */
+inline
+CL_HSMqk::SecretKey CL_HSMqk::keygen (Mpz &sk) const
+{
+  return SecretKey (*this, sk);
 }
 
 /* */

@@ -62,9 +62,16 @@ namespace BICYCL
         /* constructors */
         CL_HSM_PublicKey (const Cryptosystem &,
                           const CL_HSM_SecretKey<Cryptosystem> &);
+        CL_HSM_PublicKey (const QFI &, size_t, size_t, const QFI &, 
+                          const QFI &, const QFI &);
 
         /* getters */
         const QFI & elt () const;
+        const size_t & d () const;
+        const size_t & e () const;
+        const QFI & e_precomp () const;
+        const QFI & d_precomp () const;
+        const QFI & de_precomp () const;
 
         /* */
         void exponentiation (const Cryptosystem &C, QFI &r, const Mpz &n) const;

@@ -4,8 +4,8 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/xlong/bicycl-master
-BuildDirectory: /home/xlong/bicycl-master/build
+SourceDirectory: /home/xlong/rust-to-cpp/cpp-code/bicycl-master
+BuildDirectory: /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build
 
 # Where to place the cost data store
 CostDataFile: 
@@ -27,7 +27,7 @@ SubmitInactivityTimeout:
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/local/bin/cmake" "/home/xlong/bicycl-master"
+ConfigureCommand: "/usr/local/bin/cmake" "/home/xlong/rust-to-cpp/cpp-code/bicycl-master"
 MakeCommand: /usr/local/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 DefaultCTestConfigurationType: Release
 

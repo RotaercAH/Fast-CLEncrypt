@@ -1,14 +1,14 @@
-Start testing: Dec 27 19:33 CST
+Start testing: Jan 04 13:57 CST
 ----------------------------------------------------------
 1/3 Testing: test_gmp_extras
 1/3 Test: test_gmp_extras
-Command: "/home/xlong/bicycl-master/build/tests/test_gmp_extras"
-Directory: /home/xlong/bicycl-master/tests
-"test_gmp_extras" start time: Dec 27 19:33 CST
+Command: "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests/test_gmp_extras"
+Directory: /home/xlong/rust-to-cpp/cpp-code/bicycl-master/tests
+"test_gmp_extras" start time: Jan 04 13:57 CST
 Output:
 ----------------------------------------------------------
-# seed = 1703676799798665545
-# Run '/home/xlong/bicycl-master/build/tests/test_gmp_extras 1703676799798665545' to rerun the same test
+# seed = 1704347860481349734
+# Run '/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests/test_gmp_extras 1704347860481349734' to rerun the same test
 test_mpz_extract_bits ................................................. success
 test_mpz_random_prime ................................................. success
 test_mpz_sqrt_mod_prime ............................................... success
@@ -17,48 +17,48 @@ test_JSF .............................................................. success
 test_assignment_from_bignum ........................................... success
 test_pow_mod_with_precomp ............................................. success
 <end of output>
-Test time =   0.38 sec
+Test time =   0.21 sec
 ----------------------------------------------------------
 Test Passed.
-"test_gmp_extras" end time: Dec 27 19:33 CST
+"test_gmp_extras" end time: Jan 04 13:57 CST
 "test_gmp_extras" time elapsed: 00:00:00
 ----------------------------------------------------------
 
 2/3 Testing: test_qfi
 2/3 Test: test_qfi
-Command: "/home/xlong/bicycl-master/build/tests/test_qfi"
-Directory: /home/xlong/bicycl-master/tests
-"test_qfi" start time: Dec 27 19:33 CST
+Command: "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests/test_qfi"
+Directory: /home/xlong/rust-to-cpp/cpp-code/bicycl-master/tests
+"test_qfi" start time: Jan 04 13:57 CST
 Output:
 ----------------------------------------------------------
-# seed = 1703676800208175338
-# Run '/home/xlong/bicycl-master/build/tests/test_qfi 1703676800208175338' to rerun the same test
+# seed = 1704347860687835403
+# Run '/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests/test_qfi 1704347860687835403' to rerun the same test
 test_qfi_nupow ........................................................ success
 test_class_number_bound ............................................... success
 test_compressed_repr .................................................. success
 <end of output>
-Test time =   0.46 sec
+Test time =   0.43 sec
 ----------------------------------------------------------
 Test Passed.
-"test_qfi" end time: Dec 27 19:33 CST
+"test_qfi" end time: Jan 04 13:57 CST
 "test_qfi" time elapsed: 00:00:00
 ----------------------------------------------------------
 
 3/3 Testing: test_encrypt
 3/3 Test: test_encrypt
-Command: "/home/xlong/bicycl-master/build/tests/test_encrypt"
-Directory: /home/xlong/bicycl-master/tests
-"test_encrypt" start time: Dec 27 19:33 CST
+Command: "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests/test_encrypt"
+Directory: /home/xlong/rust-to-cpp/cpp-code/bicycl-master/tests
+"test_encrypt" start time: Jan 04 13:57 CST
 Output:
 ----------------------------------------------------------
-m:  46157837773593672764797810552575023369849524672379677597937366536752421854749
-46157837773593672764797810552575023369849524672379677597937366536752421854749
+message: 46157837773593672764797810552575023369849524672379677597937366536752421854749
+m 46157837773593672764797810552575023369849524672379677597937366536752421854749
 <end of output>
-Test time =   0.01 sec
+Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"test_encrypt" end time: Dec 27 19:33 CST
+"test_encrypt" end time: Jan 04 13:57 CST
 "test_encrypt" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Dec 27 19:33 CST
+End testing: Jan 04 13:57 CST

@@ -63,11 +63,60 @@ CL_HSM_PublicKey<Cryptosystem>::CL_HSM_PublicKey (const Cryptosystem &C,
   }
 }
 
+/* */
+template <class Cryptosystem>
+inline
+CL_HSM_PublicKey<Cryptosystem>::CL_HSM_PublicKey (const QFI &pk, 
+                                                  size_t d, 
+                                                  size_t e, 
+                                                  const QFI &pk_e_precomp, 
+                                                  const QFI &pk_d_precomp,
+                                                  const QFI &pk_de_precomp)
+  : pk_(pk), d_(d), e_(e), pk_e_precomp_(pk_e_precomp), pk_d_precomp_(pk_d_precomp), pk_de_precomp_(pk_de_precomp)
+{
+}
+
+
 template <class Cryptosystem>
 inline
 const QFI & CL_HSM_PublicKey<Cryptosystem>::elt () const
 {
   return pk_;
+}
+
+template <class Cryptosystem>
+inline
+const size_t & CL_HSM_PublicKey<Cryptosystem>::e () const
+{
+  return e_;
+}
+
+template <class Cryptosystem>
+inline
+const size_t & CL_HSM_PublicKey<Cryptosystem>::d () const
+{
+  return d_;
+}
+
+template <class Cryptosystem>
+inline
+const QFI & CL_HSM_PublicKey<Cryptosystem>::e_precomp () const
+{
+  return pk_e_precomp_;
+}
+
+template <class Cryptosystem>
+inline
+const QFI & CL_HSM_PublicKey<Cryptosystem>::d_precomp() const
+{
+  return pk_d_precomp_;
+}
+
+template <class Cryptosystem>
+inline
+const QFI & CL_HSM_PublicKey<Cryptosystem>::de_precomp() const
+{
+  return pk_de_precomp_;
 }
 
 /* */

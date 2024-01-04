@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xlong/bicycl-master
+CMAKE_SOURCE_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xlong/bicycl-master/build
+CMAKE_BINARY_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build
 
 # Utility rule file for benchmark_CL_HSM2k.
 
@@ -67,8 +67,8 @@ include benchs/CMakeFiles/benchmark_CL_HSM2k.dir/compiler_depend.make
 include benchs/CMakeFiles/benchmark_CL_HSM2k.dir/progress.make
 
 benchs/CMakeFiles/benchmark_CL_HSM2k:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/xlong/bicycl-master/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running benchmark_CL_HSM2k"
-	cd /home/xlong/bicycl-master/build/benchs && ./benchmark_CL_HSM2k
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running benchmark_CL_HSM2k"
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs && ./benchmark_CL_HSM2k
 
 benchmark_CL_HSM2k: benchs/CMakeFiles/benchmark_CL_HSM2k
 benchmark_CL_HSM2k: benchs/CMakeFiles/benchmark_CL_HSM2k.dir/build.make
@@ -79,10 +79,10 @@ benchs/CMakeFiles/benchmark_CL_HSM2k.dir/build: benchmark_CL_HSM2k
 .PHONY : benchs/CMakeFiles/benchmark_CL_HSM2k.dir/build
 
 benchs/CMakeFiles/benchmark_CL_HSM2k.dir/clean:
-	cd /home/xlong/bicycl-master/build/benchs && $(CMAKE_COMMAND) -P CMakeFiles/benchmark_CL_HSM2k.dir/cmake_clean.cmake
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs && $(CMAKE_COMMAND) -P CMakeFiles/benchmark_CL_HSM2k.dir/cmake_clean.cmake
 .PHONY : benchs/CMakeFiles/benchmark_CL_HSM2k.dir/clean
 
 benchs/CMakeFiles/benchmark_CL_HSM2k.dir/depend:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/bicycl-master /home/xlong/bicycl-master/benchs /home/xlong/bicycl-master/build /home/xlong/bicycl-master/build/benchs /home/xlong/bicycl-master/build/benchs/CMakeFiles/benchmark_CL_HSM2k.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/rust-to-cpp/cpp-code/bicycl-master /home/xlong/rust-to-cpp/cpp-code/bicycl-master/benchs /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs/CMakeFiles/benchmark_CL_HSM2k.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : benchs/CMakeFiles/benchmark_CL_HSM2k.dir/depend
 

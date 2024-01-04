@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xlong/bicycl-master
+CMAKE_SOURCE_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xlong/bicycl-master/build
+CMAKE_BINARY_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build
 
 # Utility rule file for check.
 
@@ -67,8 +67,8 @@ include tests/CMakeFiles/check.dir/compiler_depend.make
 include tests/CMakeFiles/check.dir/progress.make
 
 tests/CMakeFiles/check:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/xlong/bicycl-master/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running the tests"
-	cd /home/xlong/bicycl-master/build/tests && /usr/local/bin/ctest --output-on-failure $(ARGS)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running the tests"
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests && /usr/local/bin/ctest --output-on-failure $(ARGS)
 
 check: tests/CMakeFiles/check
 check: tests/CMakeFiles/check.dir/build.make
@@ -79,10 +79,10 @@ tests/CMakeFiles/check.dir/build: check
 .PHONY : tests/CMakeFiles/check.dir/build
 
 tests/CMakeFiles/check.dir/clean:
-	cd /home/xlong/bicycl-master/build/tests && $(CMAKE_COMMAND) -P CMakeFiles/check.dir/cmake_clean.cmake
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests && $(CMAKE_COMMAND) -P CMakeFiles/check.dir/cmake_clean.cmake
 .PHONY : tests/CMakeFiles/check.dir/clean
 
 tests/CMakeFiles/check.dir/depend:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/bicycl-master /home/xlong/bicycl-master/tests /home/xlong/bicycl-master/build /home/xlong/bicycl-master/build/tests /home/xlong/bicycl-master/build/tests/CMakeFiles/check.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/rust-to-cpp/cpp-code/bicycl-master /home/xlong/rust-to-cpp/cpp-code/bicycl-master/tests /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests/CMakeFiles/check.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : tests/CMakeFiles/check.dir/depend
 

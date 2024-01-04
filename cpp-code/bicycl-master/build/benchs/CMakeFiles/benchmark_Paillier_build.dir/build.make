@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xlong/bicycl-master
+CMAKE_SOURCE_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xlong/bicycl-master/build
+CMAKE_BINARY_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build
 
 # Include any dependencies generated for this target.
 include benchs/CMakeFiles/benchmark_Paillier_build.dir/depend.make
@@ -70,18 +70,18 @@ include benchs/CMakeFiles/benchmark_Paillier_build.dir/progress.make
 include benchs/CMakeFiles/benchmark_Paillier_build.dir/flags.make
 
 benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o: benchs/CMakeFiles/benchmark_Paillier_build.dir/flags.make
-benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o: /home/xlong/bicycl-master/benchs/benchmark_Paillier.cpp
+benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o: /home/xlong/rust-to-cpp/cpp-code/bicycl-master/benchs/benchmark_Paillier.cpp
 benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o: benchs/CMakeFiles/benchmark_Paillier_build.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xlong/bicycl-master/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o"
-	cd /home/xlong/bicycl-master/build/benchs && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o -MF CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o.d -o CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o -c /home/xlong/bicycl-master/benchs/benchmark_Paillier.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o"
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o -MF CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o.d -o CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o -c /home/xlong/rust-to-cpp/cpp-code/bicycl-master/benchs/benchmark_Paillier.cpp
 
 benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.i"
-	cd /home/xlong/bicycl-master/build/benchs && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xlong/bicycl-master/benchs/benchmark_Paillier.cpp > CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.i
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xlong/rust-to-cpp/cpp-code/bicycl-master/benchs/benchmark_Paillier.cpp > CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.i
 
 benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.s"
-	cd /home/xlong/bicycl-master/build/benchs && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xlong/bicycl-master/benchs/benchmark_Paillier.cpp -o CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.s
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xlong/rust-to-cpp/cpp-code/bicycl-master/benchs/benchmark_Paillier.cpp -o CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.s
 
 # Object files for target benchmark_Paillier_build
 benchmark_Paillier_build_OBJECTS = \
@@ -96,18 +96,18 @@ benchs/benchmark_Paillier: /usr/lib/x86_64-linux-gnu/libgmp.so
 benchs/benchmark_Paillier: /usr/lib/x86_64-linux-gnu/libgmpxx.so
 benchs/benchmark_Paillier: /usr/lib/x86_64-linux-gnu/libcrypto.so
 benchs/benchmark_Paillier: benchs/CMakeFiles/benchmark_Paillier_build.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xlong/bicycl-master/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable benchmark_Paillier"
-	cd /home/xlong/bicycl-master/build/benchs && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/benchmark_Paillier_build.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable benchmark_Paillier"
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/benchmark_Paillier_build.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 benchs/CMakeFiles/benchmark_Paillier_build.dir/build: benchs/benchmark_Paillier
 .PHONY : benchs/CMakeFiles/benchmark_Paillier_build.dir/build
 
 benchs/CMakeFiles/benchmark_Paillier_build.dir/clean:
-	cd /home/xlong/bicycl-master/build/benchs && $(CMAKE_COMMAND) -P CMakeFiles/benchmark_Paillier_build.dir/cmake_clean.cmake
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs && $(CMAKE_COMMAND) -P CMakeFiles/benchmark_Paillier_build.dir/cmake_clean.cmake
 .PHONY : benchs/CMakeFiles/benchmark_Paillier_build.dir/clean
 
 benchs/CMakeFiles/benchmark_Paillier_build.dir/depend:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/bicycl-master /home/xlong/bicycl-master/benchs /home/xlong/bicycl-master/build /home/xlong/bicycl-master/build/benchs /home/xlong/bicycl-master/build/benchs/CMakeFiles/benchmark_Paillier_build.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/rust-to-cpp/cpp-code/bicycl-master /home/xlong/rust-to-cpp/cpp-code/bicycl-master/benchs /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs/CMakeFiles/benchmark_Paillier_build.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : benchs/CMakeFiles/benchmark_Paillier_build.dir/depend
 

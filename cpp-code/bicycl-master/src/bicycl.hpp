@@ -35,6 +35,7 @@
 #include "bicycl/Paillier.hpp"
 #include "bicycl/Joye_Libert.hpp"
 #include "bicycl/threshold_ECDSA.hpp"
+#include "bicycl/CL_HSM_utils.hpp"
 
 namespace BICYCL
 {

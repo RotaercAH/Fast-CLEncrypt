@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xlong/bicycl-master
+CMAKE_SOURCE_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xlong/bicycl-master/build
+CMAKE_BINARY_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build
 
 # Utility rule file for ContinuousUpdate.
 
@@ -67,7 +67,7 @@ include tests/CMakeFiles/ContinuousUpdate.dir/compiler_depend.make
 include tests/CMakeFiles/ContinuousUpdate.dir/progress.make
 
 tests/CMakeFiles/ContinuousUpdate:
-	cd /home/xlong/bicycl-master/build/tests && /usr/local/bin/ctest -D ContinuousUpdate
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests && /usr/local/bin/ctest -D ContinuousUpdate
 
 ContinuousUpdate: tests/CMakeFiles/ContinuousUpdate
 ContinuousUpdate: tests/CMakeFiles/ContinuousUpdate.dir/build.make
@@ -78,10 +78,10 @@ tests/CMakeFiles/ContinuousUpdate.dir/build: ContinuousUpdate
 .PHONY : tests/CMakeFiles/ContinuousUpdate.dir/build
 
 tests/CMakeFiles/ContinuousUpdate.dir/clean:
-	cd /home/xlong/bicycl-master/build/tests && $(CMAKE_COMMAND) -P CMakeFiles/ContinuousUpdate.dir/cmake_clean.cmake
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests && $(CMAKE_COMMAND) -P CMakeFiles/ContinuousUpdate.dir/cmake_clean.cmake
 .PHONY : tests/CMakeFiles/ContinuousUpdate.dir/clean
 
 tests/CMakeFiles/ContinuousUpdate.dir/depend:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/bicycl-master /home/xlong/bicycl-master/tests /home/xlong/bicycl-master/build /home/xlong/bicycl-master/build/tests /home/xlong/bicycl-master/build/tests/CMakeFiles/ContinuousUpdate.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/rust-to-cpp/cpp-code/bicycl-master /home/xlong/rust-to-cpp/cpp-code/bicycl-master/tests /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests/CMakeFiles/ContinuousUpdate.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : tests/CMakeFiles/ContinuousUpdate.dir/depend
 

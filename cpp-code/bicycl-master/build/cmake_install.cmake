@@ -1,4 +1,4 @@
-# Install script for directory: /home/xlong/bicycl-master
+# Install script for directory: /home/xlong/rust-to-cpp/cpp-code/bicycl-master
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,8 +44,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/xlong/bicycl-master/build/src/cmake_install.cmake")
-  include("/home/xlong/bicycl-master/build/doc/cmake_install.cmake")
+  include("/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/src/cmake_install.cmake")
+  include("/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/doc/cmake_install.cmake")
 
 endif()
 
@@ -57,5 +57,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/xlong/bicycl-master/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

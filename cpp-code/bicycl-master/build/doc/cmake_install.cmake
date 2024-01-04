@@ -1,4 +1,4 @@
-# Install script for directory: /home/xlong/bicycl-master/doc
+# Install script for directory: /home/xlong/rust-to-cpp/cpp-code/bicycl-master/doc
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

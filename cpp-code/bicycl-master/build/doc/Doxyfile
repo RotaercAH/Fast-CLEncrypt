@@ -1,8 +1,8 @@
 PROJECT_NAME            = "BICYCL"
 PROJECT_NUMBER          = 0.0.1
-PROJECT_LOGO            = "/home/xlong/bicycl-master/doc/logo.jpg"
+PROJECT_LOGO            = "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/doc/logo.jpg"
 OUTPUT_LANGUAGE         = English
-INPUT                   = /home/xlong/bicycl-master/doc /home/xlong/bicycl-master/src
+INPUT                   = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/doc /home/xlong/rust-to-cpp/cpp-code/bicycl-master/src
 RECURSIVE               = YES
 EXTRACT_STATIC          = YES
 MARKDOWN_SUPPORT        = YES
@@ -23,12 +23,12 @@ ALIASES                 += cite{1}="\ref bib\1 \"[\1]\""
 ALIASES                 += cite{2}="\ref bib\1 \"[\1, \2]\""
 
 GENERATE_HTML           = YES
-HTML_FOOTER             = /home/xlong/bicycl-master/doc/footer.html
+HTML_FOOTER             = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/doc/footer.html
 USE_MATHJAX             = YES
 #MATHJAX_VERSION         = MathJax_3
 #MATHJAX_EXTENSIONS      = ams amsmath
 MATHJAX_EXTENSIONS      = TeX/AMSmath TeX/AMSsymbols Tex/xspace
-FORMULA_MACROFILE       = /home/xlong/bicycl-master/doc/include.tex
+FORMULA_MACROFILE       = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/doc/include.tex
 SEARCHENGINE            = NO
 DISABLE_INDEX           = YES
 GENERATE_TREEVIEW       = YES

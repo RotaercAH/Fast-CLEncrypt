@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xlong/bicycl-master
+CMAKE_SOURCE_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xlong/bicycl-master/build
+CMAKE_BINARY_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build
 
 # Utility rule file for examples.
 
@@ -67,7 +67,7 @@ include examples/CMakeFiles/examples.dir/compiler_depend.make
 include examples/CMakeFiles/examples.dir/progress.make
 
 examples/CMakeFiles/examples:
-	cd /home/xlong/bicycl-master/build/examples && /usr/local/bin/cmake -E sleep 0
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/examples && /usr/local/bin/cmake -E sleep 0
 
 examples: examples/CMakeFiles/examples
 examples: examples/CMakeFiles/examples.dir/build.make
@@ -78,10 +78,10 @@ examples/CMakeFiles/examples.dir/build: examples
 .PHONY : examples/CMakeFiles/examples.dir/build
 
 examples/CMakeFiles/examples.dir/clean:
-	cd /home/xlong/bicycl-master/build/examples && $(CMAKE_COMMAND) -P CMakeFiles/examples.dir/cmake_clean.cmake
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/examples && $(CMAKE_COMMAND) -P CMakeFiles/examples.dir/cmake_clean.cmake
 .PHONY : examples/CMakeFiles/examples.dir/clean
 
 examples/CMakeFiles/examples.dir/depend:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/bicycl-master /home/xlong/bicycl-master/examples /home/xlong/bicycl-master/build /home/xlong/bicycl-master/build/examples /home/xlong/bicycl-master/build/examples/CMakeFiles/examples.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/rust-to-cpp/cpp-code/bicycl-master /home/xlong/rust-to-cpp/cpp-code/bicycl-master/examples /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/examples /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/examples/CMakeFiles/examples.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : examples/CMakeFiles/examples.dir/depend
 

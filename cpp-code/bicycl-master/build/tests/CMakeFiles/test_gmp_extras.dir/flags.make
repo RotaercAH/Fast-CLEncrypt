@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DBICYCL_WITH_PTHREADS
 
-CXX_INCLUDES = -I/home/xlong/bicycl-master/src
+CXX_INCLUDES = -I/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src
 
 CXX_FLAGS = -O3 -Wall -Wextra -DNDEBUG -std=gnu++11
 

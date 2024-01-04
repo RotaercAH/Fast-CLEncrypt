@@ -1,4 +1,4 @@
-# Install script for directory: /home/xlong/bicycl-master/src
+# Install script for directory: /home/xlong/rust-to-cpp/cpp-code/bicycl-master/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -43,33 +43,33 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES "/home/xlong/bicycl-master/src/bicycl.hpp")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl.hpp")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/bicycl" TYPE FILE FILES
-    "/home/xlong/bicycl-master/src/bicycl/seclevel.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/seclevel.inl"
-    "/home/xlong/bicycl-master/src/bicycl/gmp_extras.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/gmp_extras.inl"
-    "/home/xlong/bicycl-master/src/bicycl/openssl_wrapper.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/openssl_wrapper.inl"
-    "/home/xlong/bicycl-master/src/bicycl/ec.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/ec.inl"
-    "/home/xlong/bicycl-master/src/bicycl/qfi.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/qfi.inl"
-    "/home/xlong/bicycl-master/src/bicycl/CL_HSM_utils.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/CL_HSM_utils.inl"
-    "/home/xlong/bicycl-master/src/bicycl/CL_HSMqk.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/CL_HSMqk.inl"
-    "/home/xlong/bicycl-master/src/bicycl/CL_HSM2k.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/CL_HSM2k.inl"
-    "/home/xlong/bicycl-master/src/bicycl/Paillier.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/Paillier.inl"
-    "/home/xlong/bicycl-master/src/bicycl/Joye_Libert.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/Joye_Libert.inl"
-    "/home/xlong/bicycl-master/src/bicycl/threshold_ECDSA.hpp"
-    "/home/xlong/bicycl-master/src/bicycl/threshold_ECDSA.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/seclevel.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/seclevel.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/gmp_extras.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/gmp_extras.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/openssl_wrapper.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/openssl_wrapper.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/ec.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/ec.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/qfi.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/qfi.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/CL_HSM_utils.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/CL_HSM_utils.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/CL_HSMqk.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/CL_HSMqk.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/CL_HSM2k.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/CL_HSM2k.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/Paillier.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/Paillier.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/Joye_Libert.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/Joye_Libert.inl"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/threshold_ECDSA.hpp"
+    "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/src/bicycl/threshold_ECDSA.inl"
     )
 endif()
 

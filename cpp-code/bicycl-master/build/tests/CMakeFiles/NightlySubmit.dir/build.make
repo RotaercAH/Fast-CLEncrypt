@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xlong/bicycl-master
+CMAKE_SOURCE_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xlong/bicycl-master/build
+CMAKE_BINARY_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build
 
 # Utility rule file for NightlySubmit.
 
@@ -67,7 +67,7 @@ include tests/CMakeFiles/NightlySubmit.dir/compiler_depend.make
 include tests/CMakeFiles/NightlySubmit.dir/progress.make
 
 tests/CMakeFiles/NightlySubmit:
-	cd /home/xlong/bicycl-master/build/tests && /usr/local/bin/ctest -D NightlySubmit
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests && /usr/local/bin/ctest -D NightlySubmit
 
 NightlySubmit: tests/CMakeFiles/NightlySubmit
 NightlySubmit: tests/CMakeFiles/NightlySubmit.dir/build.make
@@ -78,10 +78,10 @@ tests/CMakeFiles/NightlySubmit.dir/build: NightlySubmit
 .PHONY : tests/CMakeFiles/NightlySubmit.dir/build
 
 tests/CMakeFiles/NightlySubmit.dir/clean:
-	cd /home/xlong/bicycl-master/build/tests && $(CMAKE_COMMAND) -P CMakeFiles/NightlySubmit.dir/cmake_clean.cmake
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests && $(CMAKE_COMMAND) -P CMakeFiles/NightlySubmit.dir/cmake_clean.cmake
 .PHONY : tests/CMakeFiles/NightlySubmit.dir/clean
 
 tests/CMakeFiles/NightlySubmit.dir/depend:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/bicycl-master /home/xlong/bicycl-master/tests /home/xlong/bicycl-master/build /home/xlong/bicycl-master/build/tests /home/xlong/bicycl-master/build/tests/CMakeFiles/NightlySubmit.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/rust-to-cpp/cpp-code/bicycl-master /home/xlong/rust-to-cpp/cpp-code/bicycl-master/tests /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/tests/CMakeFiles/NightlySubmit.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : tests/CMakeFiles/NightlySubmit.dir/depend
 

@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/xlong/bicycl-master/tests/test_qfi.cpp" "tests/CMakeFiles/test_qfi.dir/test_qfi.cpp.o" "gcc" "tests/CMakeFiles/test_qfi.dir/test_qfi.cpp.o.d"
+  "/home/xlong/rust-to-cpp/cpp-code/bicycl-master/tests/test_qfi.cpp" "tests/CMakeFiles/test_qfi.dir/test_qfi.cpp.o" "gcc" "tests/CMakeFiles/test_qfi.dir/test_qfi.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

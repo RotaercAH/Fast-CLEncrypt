@@ -57,10 +57,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xlong/bicycl-master
+CMAKE_SOURCE_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xlong/bicycl-master/build
+CMAKE_BINARY_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/xlong/bicycl-master/build/CMakeFiles /home/xlong/bicycl-master/build/examples//CMakeFiles/progress.marks
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/xlong/bicycl-master/build/CMakeFiles 0
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/CMakeFiles /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/examples//CMakeFiles/progress.marks
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/clean
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/preinstall
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/preinstall
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 examples/CMakeFiles/examples.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/CMakeFiles/examples.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/CMakeFiles/examples.dir/rule
 .PHONY : examples/CMakeFiles/examples.dir/rule
 
 # Convenience name for target.
@@ -172,12 +172,12 @@ examples: examples/CMakeFiles/examples.dir/rule
 
 # fast build rule for target.
 examples/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/build
 .PHONY : examples/fast
 
 # Convenience name for target.
 examples/CMakeFiles/chia-vdf.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/CMakeFiles/chia-vdf.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/CMakeFiles/chia-vdf.dir/rule
 .PHONY : examples/CMakeFiles/chia-vdf.dir/rule
 
 # Convenience name for target.
@@ -186,12 +186,12 @@ chia-vdf: examples/CMakeFiles/chia-vdf.dir/rule
 
 # fast build rule for target.
 chia-vdf/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/chia-vdf.dir/build.make examples/CMakeFiles/chia-vdf.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/chia-vdf.dir/build.make examples/CMakeFiles/chia-vdf.dir/build
 .PHONY : chia-vdf/fast
 
 # Convenience name for target.
 examples/CMakeFiles/CL_HSMqk_setup.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/CMakeFiles/CL_HSMqk_setup.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/CMakeFiles/CL_HSMqk_setup.dir/rule
 .PHONY : examples/CMakeFiles/CL_HSMqk_setup.dir/rule
 
 # Convenience name for target.
@@ -200,12 +200,12 @@ CL_HSMqk_setup: examples/CMakeFiles/CL_HSMqk_setup.dir/rule
 
 # fast build rule for target.
 CL_HSMqk_setup/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSMqk_setup.dir/build.make examples/CMakeFiles/CL_HSMqk_setup.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSMqk_setup.dir/build.make examples/CMakeFiles/CL_HSMqk_setup.dir/build
 .PHONY : CL_HSMqk_setup/fast
 
 # Convenience name for target.
 examples/CMakeFiles/CL_HSM2k_setup.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/CMakeFiles/CL_HSM2k_setup.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 examples/CMakeFiles/CL_HSM2k_setup.dir/rule
 .PHONY : examples/CMakeFiles/CL_HSM2k_setup.dir/rule
 
 # Convenience name for target.
@@ -214,7 +214,7 @@ CL_HSM2k_setup: examples/CMakeFiles/CL_HSM2k_setup.dir/rule
 
 # fast build rule for target.
 CL_HSM2k_setup/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSM2k_setup.dir/build.make examples/CMakeFiles/CL_HSM2k_setup.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSM2k_setup.dir/build.make examples/CMakeFiles/CL_HSM2k_setup.dir/build
 .PHONY : CL_HSM2k_setup/fast
 
 CL_HSM2k_setup.o: CL_HSM2k_setup.cpp.o
@@ -222,7 +222,7 @@ CL_HSM2k_setup.o: CL_HSM2k_setup.cpp.o
 
 # target to build an object file
 CL_HSM2k_setup.cpp.o:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSM2k_setup.dir/build.make examples/CMakeFiles/CL_HSM2k_setup.dir/CL_HSM2k_setup.cpp.o
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSM2k_setup.dir/build.make examples/CMakeFiles/CL_HSM2k_setup.dir/CL_HSM2k_setup.cpp.o
 .PHONY : CL_HSM2k_setup.cpp.o
 
 CL_HSM2k_setup.i: CL_HSM2k_setup.cpp.i
@@ -230,7 +230,7 @@ CL_HSM2k_setup.i: CL_HSM2k_setup.cpp.i
 
 # target to preprocess a source file
 CL_HSM2k_setup.cpp.i:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSM2k_setup.dir/build.make examples/CMakeFiles/CL_HSM2k_setup.dir/CL_HSM2k_setup.cpp.i
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSM2k_setup.dir/build.make examples/CMakeFiles/CL_HSM2k_setup.dir/CL_HSM2k_setup.cpp.i
 .PHONY : CL_HSM2k_setup.cpp.i
 
 CL_HSM2k_setup.s: CL_HSM2k_setup.cpp.s
@@ -238,7 +238,7 @@ CL_HSM2k_setup.s: CL_HSM2k_setup.cpp.s
 
 # target to generate assembly for a file
 CL_HSM2k_setup.cpp.s:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSM2k_setup.dir/build.make examples/CMakeFiles/CL_HSM2k_setup.dir/CL_HSM2k_setup.cpp.s
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSM2k_setup.dir/build.make examples/CMakeFiles/CL_HSM2k_setup.dir/CL_HSM2k_setup.cpp.s
 .PHONY : CL_HSM2k_setup.cpp.s
 
 CL_HSMqk_setup.o: CL_HSMqk_setup.cpp.o
@@ -246,7 +246,7 @@ CL_HSMqk_setup.o: CL_HSMqk_setup.cpp.o
 
 # target to build an object file
 CL_HSMqk_setup.cpp.o:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSMqk_setup.dir/build.make examples/CMakeFiles/CL_HSMqk_setup.dir/CL_HSMqk_setup.cpp.o
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSMqk_setup.dir/build.make examples/CMakeFiles/CL_HSMqk_setup.dir/CL_HSMqk_setup.cpp.o
 .PHONY : CL_HSMqk_setup.cpp.o
 
 CL_HSMqk_setup.i: CL_HSMqk_setup.cpp.i
@@ -254,7 +254,7 @@ CL_HSMqk_setup.i: CL_HSMqk_setup.cpp.i
 
 # target to preprocess a source file
 CL_HSMqk_setup.cpp.i:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSMqk_setup.dir/build.make examples/CMakeFiles/CL_HSMqk_setup.dir/CL_HSMqk_setup.cpp.i
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSMqk_setup.dir/build.make examples/CMakeFiles/CL_HSMqk_setup.dir/CL_HSMqk_setup.cpp.i
 .PHONY : CL_HSMqk_setup.cpp.i
 
 CL_HSMqk_setup.s: CL_HSMqk_setup.cpp.s
@@ -262,7 +262,7 @@ CL_HSMqk_setup.s: CL_HSMqk_setup.cpp.s
 
 # target to generate assembly for a file
 CL_HSMqk_setup.cpp.s:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSMqk_setup.dir/build.make examples/CMakeFiles/CL_HSMqk_setup.dir/CL_HSMqk_setup.cpp.s
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/CL_HSMqk_setup.dir/build.make examples/CMakeFiles/CL_HSMqk_setup.dir/CL_HSMqk_setup.cpp.s
 .PHONY : CL_HSMqk_setup.cpp.s
 
 chia-vdf.o: chia-vdf.cpp.o
@@ -270,7 +270,7 @@ chia-vdf.o: chia-vdf.cpp.o
 
 # target to build an object file
 chia-vdf.cpp.o:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/chia-vdf.dir/build.make examples/CMakeFiles/chia-vdf.dir/chia-vdf.cpp.o
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/chia-vdf.dir/build.make examples/CMakeFiles/chia-vdf.dir/chia-vdf.cpp.o
 .PHONY : chia-vdf.cpp.o
 
 chia-vdf.i: chia-vdf.cpp.i
@@ -278,7 +278,7 @@ chia-vdf.i: chia-vdf.cpp.i
 
 # target to preprocess a source file
 chia-vdf.cpp.i:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/chia-vdf.dir/build.make examples/CMakeFiles/chia-vdf.dir/chia-vdf.cpp.i
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/chia-vdf.dir/build.make examples/CMakeFiles/chia-vdf.dir/chia-vdf.cpp.i
 .PHONY : chia-vdf.cpp.i
 
 chia-vdf.s: chia-vdf.cpp.s
@@ -286,7 +286,7 @@ chia-vdf.s: chia-vdf.cpp.s
 
 # target to generate assembly for a file
 chia-vdf.cpp.s:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/chia-vdf.dir/build.make examples/CMakeFiles/chia-vdf.dir/chia-vdf.cpp.s
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f examples/CMakeFiles/chia-vdf.dir/build.make examples/CMakeFiles/chia-vdf.dir/chia-vdf.cpp.s
 .PHONY : chia-vdf.cpp.s
 
 # Help Target
@@ -325,6 +325,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

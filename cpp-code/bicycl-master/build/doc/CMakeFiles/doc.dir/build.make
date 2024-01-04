@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xlong/bicycl-master
+CMAKE_SOURCE_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xlong/bicycl-master/build
+CMAKE_BINARY_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build
 
 # Utility rule file for doc.
 
@@ -67,7 +67,7 @@ include doc/CMakeFiles/doc.dir/compiler_depend.make
 include doc/CMakeFiles/doc.dir/progress.make
 
 doc/CMakeFiles/doc:
-	cd /home/xlong/bicycl-master/build/doc && /usr/local/bin/cmake -E echo The\ documentation\ cannot\ be\ build\ as\ CMake\ failed\ to\ find\ doxygen\ during\ the\ configuration\ step.\ If\ you\ want\ to\ build\ the\ documentation,\ you\ need\ to\ install\ doxygen\ and\ re-run\ the\ configuration\ step\ of\ CMake.
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/doc && /usr/local/bin/cmake -E echo The\ documentation\ cannot\ be\ build\ as\ CMake\ failed\ to\ find\ doxygen\ during\ the\ configuration\ step.\ If\ you\ want\ to\ build\ the\ documentation,\ you\ need\ to\ install\ doxygen\ and\ re-run\ the\ configuration\ step\ of\ CMake.
 
 doc: doc/CMakeFiles/doc
 doc: doc/CMakeFiles/doc.dir/build.make
@@ -78,10 +78,10 @@ doc/CMakeFiles/doc.dir/build: doc
 .PHONY : doc/CMakeFiles/doc.dir/build
 
 doc/CMakeFiles/doc.dir/clean:
-	cd /home/xlong/bicycl-master/build/doc && $(CMAKE_COMMAND) -P CMakeFiles/doc.dir/cmake_clean.cmake
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/doc && $(CMAKE_COMMAND) -P CMakeFiles/doc.dir/cmake_clean.cmake
 .PHONY : doc/CMakeFiles/doc.dir/clean
 
 doc/CMakeFiles/doc.dir/depend:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/bicycl-master /home/xlong/bicycl-master/doc /home/xlong/bicycl-master/build /home/xlong/bicycl-master/build/doc /home/xlong/bicycl-master/build/doc/CMakeFiles/doc.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xlong/rust-to-cpp/cpp-code/bicycl-master /home/xlong/rust-to-cpp/cpp-code/bicycl-master/doc /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/doc /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/doc/CMakeFiles/doc.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : doc/CMakeFiles/doc.dir/depend
 

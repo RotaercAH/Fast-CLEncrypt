@@ -57,10 +57,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xlong/bicycl-master
+CMAKE_SOURCE_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xlong/bicycl-master/build
+CMAKE_BINARY_DIR = /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/xlong/bicycl-master/build/CMakeFiles /home/xlong/bicycl-master/build/benchs//CMakeFiles/progress.marks
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/xlong/bicycl-master/build/CMakeFiles 0
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/CMakeFiles /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/benchs//CMakeFiles/progress.marks
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/clean
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/preinstall
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/preinstall
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 benchs/CMakeFiles/benchs_build.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchs_build.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchs_build.dir/rule
 .PHONY : benchs/CMakeFiles/benchs_build.dir/rule
 
 # Convenience name for target.
@@ -172,12 +172,12 @@ benchs_build: benchs/CMakeFiles/benchs_build.dir/rule
 
 # fast build rule for target.
 benchs_build/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchs_build.dir/build.make benchs/CMakeFiles/benchs_build.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchs_build.dir/build.make benchs/CMakeFiles/benchs_build.dir/build
 .PHONY : benchs_build/fast
 
 # Convenience name for target.
 benchs/CMakeFiles/benchs.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchs.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchs.dir/rule
 .PHONY : benchs/CMakeFiles/benchs.dir/rule
 
 # Convenience name for target.
@@ -186,12 +186,12 @@ benchs: benchs/CMakeFiles/benchs.dir/rule
 
 # fast build rule for target.
 benchs/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchs.dir/build.make benchs/CMakeFiles/benchs.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchs.dir/build.make benchs/CMakeFiles/benchs.dir/build
 .PHONY : benchs/fast
 
 # Convenience name for target.
 benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/rule
 .PHONY : benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/rule
 
 # Convenience name for target.
@@ -200,12 +200,12 @@ benchmark_CL_HSMqk_build: benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/rule
 
 # fast build rule for target.
 benchmark_CL_HSMqk_build/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/build
 .PHONY : benchmark_CL_HSMqk_build/fast
 
 # Convenience name for target.
 benchs/CMakeFiles/benchmark_CL_HSMqk.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_CL_HSMqk.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_CL_HSMqk.dir/rule
 .PHONY : benchs/CMakeFiles/benchmark_CL_HSMqk.dir/rule
 
 # Convenience name for target.
@@ -214,12 +214,12 @@ benchmark_CL_HSMqk: benchs/CMakeFiles/benchmark_CL_HSMqk.dir/rule
 
 # fast build rule for target.
 benchmark_CL_HSMqk/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSMqk.dir/build.make benchs/CMakeFiles/benchmark_CL_HSMqk.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSMqk.dir/build.make benchs/CMakeFiles/benchmark_CL_HSMqk.dir/build
 .PHONY : benchmark_CL_HSMqk/fast
 
 # Convenience name for target.
 benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/rule
 .PHONY : benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/rule
 
 # Convenience name for target.
@@ -228,12 +228,12 @@ benchmark_CL_HSM2k_build: benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/rule
 
 # fast build rule for target.
 benchmark_CL_HSM2k_build/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/build
 .PHONY : benchmark_CL_HSM2k_build/fast
 
 # Convenience name for target.
 benchs/CMakeFiles/benchmark_CL_HSM2k.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_CL_HSM2k.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_CL_HSM2k.dir/rule
 .PHONY : benchs/CMakeFiles/benchmark_CL_HSM2k.dir/rule
 
 # Convenience name for target.
@@ -242,12 +242,12 @@ benchmark_CL_HSM2k: benchs/CMakeFiles/benchmark_CL_HSM2k.dir/rule
 
 # fast build rule for target.
 benchmark_CL_HSM2k/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSM2k.dir/build.make benchs/CMakeFiles/benchmark_CL_HSM2k.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSM2k.dir/build.make benchs/CMakeFiles/benchmark_CL_HSM2k.dir/build
 .PHONY : benchmark_CL_HSM2k/fast
 
 # Convenience name for target.
 benchs/CMakeFiles/benchmark_Paillier_build.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_Paillier_build.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_Paillier_build.dir/rule
 .PHONY : benchs/CMakeFiles/benchmark_Paillier_build.dir/rule
 
 # Convenience name for target.
@@ -256,12 +256,12 @@ benchmark_Paillier_build: benchs/CMakeFiles/benchmark_Paillier_build.dir/rule
 
 # fast build rule for target.
 benchmark_Paillier_build/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_Paillier_build.dir/build.make benchs/CMakeFiles/benchmark_Paillier_build.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_Paillier_build.dir/build.make benchs/CMakeFiles/benchmark_Paillier_build.dir/build
 .PHONY : benchmark_Paillier_build/fast
 
 # Convenience name for target.
 benchs/CMakeFiles/benchmark_Paillier.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_Paillier.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_Paillier.dir/rule
 .PHONY : benchs/CMakeFiles/benchmark_Paillier.dir/rule
 
 # Convenience name for target.
@@ -270,12 +270,12 @@ benchmark_Paillier: benchs/CMakeFiles/benchmark_Paillier.dir/rule
 
 # fast build rule for target.
 benchmark_Paillier/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_Paillier.dir/build.make benchs/CMakeFiles/benchmark_Paillier.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_Paillier.dir/build.make benchs/CMakeFiles/benchmark_Paillier.dir/build
 .PHONY : benchmark_Paillier/fast
 
 # Convenience name for target.
 benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/rule
 .PHONY : benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/rule
 
 # Convenience name for target.
@@ -284,12 +284,12 @@ benchmark_JoyeLibert_build: benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/rul
 
 # fast build rule for target.
 benchmark_JoyeLibert_build/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/build.make benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/build.make benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/build
 .PHONY : benchmark_JoyeLibert_build/fast
 
 # Convenience name for target.
 benchs/CMakeFiles/benchmark_JoyeLibert.dir/rule:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_JoyeLibert.dir/rule
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchs/CMakeFiles/benchmark_JoyeLibert.dir/rule
 .PHONY : benchs/CMakeFiles/benchmark_JoyeLibert.dir/rule
 
 # Convenience name for target.
@@ -298,7 +298,7 @@ benchmark_JoyeLibert: benchs/CMakeFiles/benchmark_JoyeLibert.dir/rule
 
 # fast build rule for target.
 benchmark_JoyeLibert/fast:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_JoyeLibert.dir/build.make benchs/CMakeFiles/benchmark_JoyeLibert.dir/build
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_JoyeLibert.dir/build.make benchs/CMakeFiles/benchmark_JoyeLibert.dir/build
 .PHONY : benchmark_JoyeLibert/fast
 
 benchmark_CL_HSM2k.o: benchmark_CL_HSM2k.cpp.o
@@ -306,7 +306,7 @@ benchmark_CL_HSM2k.o: benchmark_CL_HSM2k.cpp.o
 
 # target to build an object file
 benchmark_CL_HSM2k.cpp.o:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/benchmark_CL_HSM2k.cpp.o
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/benchmark_CL_HSM2k.cpp.o
 .PHONY : benchmark_CL_HSM2k.cpp.o
 
 benchmark_CL_HSM2k.i: benchmark_CL_HSM2k.cpp.i
@@ -314,7 +314,7 @@ benchmark_CL_HSM2k.i: benchmark_CL_HSM2k.cpp.i
 
 # target to preprocess a source file
 benchmark_CL_HSM2k.cpp.i:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/benchmark_CL_HSM2k.cpp.i
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/benchmark_CL_HSM2k.cpp.i
 .PHONY : benchmark_CL_HSM2k.cpp.i
 
 benchmark_CL_HSM2k.s: benchmark_CL_HSM2k.cpp.s
@@ -322,7 +322,7 @@ benchmark_CL_HSM2k.s: benchmark_CL_HSM2k.cpp.s
 
 # target to generate assembly for a file
 benchmark_CL_HSM2k.cpp.s:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/benchmark_CL_HSM2k.cpp.s
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSM2k_build.dir/benchmark_CL_HSM2k.cpp.s
 .PHONY : benchmark_CL_HSM2k.cpp.s
 
 benchmark_CL_HSMqk.o: benchmark_CL_HSMqk.cpp.o
@@ -330,7 +330,7 @@ benchmark_CL_HSMqk.o: benchmark_CL_HSMqk.cpp.o
 
 # target to build an object file
 benchmark_CL_HSMqk.cpp.o:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/benchmark_CL_HSMqk.cpp.o
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/benchmark_CL_HSMqk.cpp.o
 .PHONY : benchmark_CL_HSMqk.cpp.o
 
 benchmark_CL_HSMqk.i: benchmark_CL_HSMqk.cpp.i
@@ -338,7 +338,7 @@ benchmark_CL_HSMqk.i: benchmark_CL_HSMqk.cpp.i
 
 # target to preprocess a source file
 benchmark_CL_HSMqk.cpp.i:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/benchmark_CL_HSMqk.cpp.i
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/benchmark_CL_HSMqk.cpp.i
 .PHONY : benchmark_CL_HSMqk.cpp.i
 
 benchmark_CL_HSMqk.s: benchmark_CL_HSMqk.cpp.s
@@ -346,7 +346,7 @@ benchmark_CL_HSMqk.s: benchmark_CL_HSMqk.cpp.s
 
 # target to generate assembly for a file
 benchmark_CL_HSMqk.cpp.s:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/benchmark_CL_HSMqk.cpp.s
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/build.make benchs/CMakeFiles/benchmark_CL_HSMqk_build.dir/benchmark_CL_HSMqk.cpp.s
 .PHONY : benchmark_CL_HSMqk.cpp.s
 
 benchmark_JoyeLibert.o: benchmark_JoyeLibert.cpp.o
@@ -354,7 +354,7 @@ benchmark_JoyeLibert.o: benchmark_JoyeLibert.cpp.o
 
 # target to build an object file
 benchmark_JoyeLibert.cpp.o:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/build.make benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/benchmark_JoyeLibert.cpp.o
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/build.make benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/benchmark_JoyeLibert.cpp.o
 .PHONY : benchmark_JoyeLibert.cpp.o
 
 benchmark_JoyeLibert.i: benchmark_JoyeLibert.cpp.i
@@ -362,7 +362,7 @@ benchmark_JoyeLibert.i: benchmark_JoyeLibert.cpp.i
 
 # target to preprocess a source file
 benchmark_JoyeLibert.cpp.i:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/build.make benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/benchmark_JoyeLibert.cpp.i
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/build.make benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/benchmark_JoyeLibert.cpp.i
 .PHONY : benchmark_JoyeLibert.cpp.i
 
 benchmark_JoyeLibert.s: benchmark_JoyeLibert.cpp.s
@@ -370,7 +370,7 @@ benchmark_JoyeLibert.s: benchmark_JoyeLibert.cpp.s
 
 # target to generate assembly for a file
 benchmark_JoyeLibert.cpp.s:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/build.make benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/benchmark_JoyeLibert.cpp.s
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/build.make benchs/CMakeFiles/benchmark_JoyeLibert_build.dir/benchmark_JoyeLibert.cpp.s
 .PHONY : benchmark_JoyeLibert.cpp.s
 
 benchmark_Paillier.o: benchmark_Paillier.cpp.o
@@ -378,7 +378,7 @@ benchmark_Paillier.o: benchmark_Paillier.cpp.o
 
 # target to build an object file
 benchmark_Paillier.cpp.o:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_Paillier_build.dir/build.make benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_Paillier_build.dir/build.make benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.o
 .PHONY : benchmark_Paillier.cpp.o
 
 benchmark_Paillier.i: benchmark_Paillier.cpp.i
@@ -386,7 +386,7 @@ benchmark_Paillier.i: benchmark_Paillier.cpp.i
 
 # target to preprocess a source file
 benchmark_Paillier.cpp.i:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_Paillier_build.dir/build.make benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.i
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_Paillier_build.dir/build.make benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.i
 .PHONY : benchmark_Paillier.cpp.i
 
 benchmark_Paillier.s: benchmark_Paillier.cpp.s
@@ -394,7 +394,7 @@ benchmark_Paillier.s: benchmark_Paillier.cpp.s
 
 # target to generate assembly for a file
 benchmark_Paillier.cpp.s:
-	cd /home/xlong/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_Paillier_build.dir/build.make benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.s
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(MAKE) $(MAKESILENT) -f benchs/CMakeFiles/benchmark_Paillier_build.dir/build.make benchs/CMakeFiles/benchmark_Paillier_build.dir/benchmark_Paillier.cpp.s
 .PHONY : benchmark_Paillier.cpp.s
 
 # Help Target
@@ -442,6 +442,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/xlong/bicycl-master/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/xlong/rust-to-cpp/cpp-code/bicycl-master/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
