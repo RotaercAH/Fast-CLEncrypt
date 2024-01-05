@@ -124,18 +124,22 @@ pub fn encrypt_and_decrypt_test_rust(message: String){
 }
 
 fn main() {
-    let start = Instant::now();
     let message = "660c690db8f30933d27f482f2e80ed5092998410882163f3b9dae1c2125ede";
     // let message = "660c690db8f30933d27f482f";
-    let sk = "4731285847384423928591964720590";
-    encrypt_and_decrypt_test_rust(message.to_string());
+    let sk = "4731285847384423928591964720523";
     let pk = public_key_gen_rust(sk.to_string());
     println!("pk_rust: {pk}");
-    let cipher = encrypt_rust(pk, message.to_string());
-    println!("cipher_rust {cipher}");
-    let m = decrypt_rust(sk.to_string(), cipher);
-    println!("m_rust: {m}");
-    let end = Instant::now();
-    println!("代码运行时间： {:?}", end - start);
-    
+    let cipher = encrypt_rust(pk.clone(), message.to_string());
+    let start1 = Instant::now();
+    for i in 1..100{
+        let cipher = encrypt_rust(pk.clone(), message.to_string());
+    }
+    let end1 = Instant::now();
+    println!("加密100次运行时间： {:?}", end1 - start1);
+    let start2 = Instant::now();
+    for i in 1..100{
+        let m = decrypt_rust(sk.to_string(), cipher.clone());
+    }
+    let end2 = Instant::now();
+    println!("解密100次运行时间： {:?}", end2 - start2);
 }

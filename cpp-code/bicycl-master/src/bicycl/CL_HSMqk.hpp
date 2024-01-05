@@ -109,6 +109,11 @@ namespace BICYCL
        *
        *@{
        */
+       /**
+       * Setup of the cryptosystem given @p q and @p p and @h h and.
+       */
+      CL_HSMqk (const Mpz &q, size_t k, const Mpz &p, const Mpz &fud_factor, const Mpz &M, const QFI &h, const Mpz &exponent_bound, const size_t d, const size_t e, const QFI &h_e_precomp, 
+                     const QFI &h_d_precomp, const QFI &h_de_precomp ,bool compact_variant, bool large_message_variant);
       /**
        * Setup of the cryptosystem given @p q and @p p.
        */
@@ -170,6 +175,10 @@ namespace BICYCL
        */
       /** Return k */
       size_t k () const;
+      /** Return e */
+      size_t e () const;
+      /** Return d */
+      size_t d () const;
       /** Return q, the cardinality of the subgroup \f$F\f$ is \f$M=q^k\f$. */
       const Mpz & q () const;
       /** Return p, a odd prime or 1. */
@@ -196,6 +205,12 @@ namespace BICYCL
       const ClassGroup & Cl_G () const;
       /** Return \f$h\f$, the generator of the cyclic subgroup \f$H\f$ */
       const QFI & h () const;
+      /** Return \f$h_e_precomp\f$ */
+      const QFI & h_e_precomp () const;
+      /** Return \f$h_d_precomp\f$ */
+      const QFI & h_d_precomp () const;
+      /** Return \f$h_de_precomp\f$ */
+      const QFI & h_de_precomp () const;
       /** Return whether the compact variant is used or not */
       bool compact_variant () const;
       /** Return whether the large message variant is used or not */

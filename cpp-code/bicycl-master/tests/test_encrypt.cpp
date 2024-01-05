@@ -6,10 +6,12 @@
 #include <chrono>
 #include "../src/bicycl.hpp"
 using namespace BICYCL;
-extern "C" const char* public_key_gen(const char* sk_str);
-extern "C" const char* encrypt_and_decrypt_test(const char* message);
-extern "C" const char* encrypt(const char* pk_str, const char* message);
-extern "C" const char* decrypt(const char* sk_str, const char* cipher_str);
+extern "C" {
+    const char* public_key_gen(const char* sk_str);
+    const char* encrypt_and_decrypt_test(const char* message);
+    const char* encrypt(const char* pk_str, const char* message);
+    const char* decrypt(const char* sk_str, const char* cipher_str);
+}
 
 std::vector<std::string> splitString(const std::string& s, char delimiter) {
     std::vector<std::string> tokens;
@@ -61,11 +63,26 @@ BICYCL::CL_HSMqk::PublicKey str_to_pk(std::string pk_str){
     std::cout << "pk_after: " << pk << std::endl;
 }
 
-const char* public_key_gen(const char* sk_str){
+CL_HSMqk generate_C(){
     Mpz q_ ("327363684155478005108109425111633537273");
     Mpz p_ ("3");
     Mpz fud_ ("1099511627776");
-    CL_HSMqk C (q_, 3, p_, fud_, true);
+    Mpz M_ ("35082577950394243101771455480308837195086416207422866395986335469645130651403699990459815877628197357603732868565417");
+    Mpz exponent_bound_ ("6053567222028239460822845227008");
+    size_t d = 52;
+    size_t e = 27;
+    std::string h_str = "12921288867771414943 1 -2700005060 0 true -982091052466434015324328275334900611819";
+    auto e_precomp_str = "5438419558175809081 1 -1511434731 0 false -982091052466434015324328275334900611819";
+    auto d_precomp_str =  "5115785705323458981 1 899307131 0 false -982091052466434015324328275334900611819";
+    auto de_precomp_str =  "475603144690409619 1 143598731 0 false -982091052466434015324328275334900611819";
+    CL_HSMqk C (q_, 3, p_, fud_, M_, str_to_qfi(h_str), exponent_bound_, d, e, str_to_qfi(e_precomp_str), str_to_qfi(d_precomp_str), str_to_qfi(de_precomp_str), true, true);
+    auto large_message_variant =  C.large_message_variant();
+    auto exponent_bound = C.encrypt_randomness_bound();
+    return C;
+}
+
+const char* public_key_gen(const char* sk_str){
+    CL_HSMqk C(generate_C());
 
     BICYCL::Mpz sk_mpz (sk_str);
 
@@ -78,10 +95,12 @@ const char* public_key_gen(const char* sk_str){
 
 const char* encrypt(const char* pk_str, const char* message){
     RandGen randgen;
-    Mpz q_ ("327363684155478005108109425111633537273");
-    Mpz p_ ("3");
-    Mpz fud_ ("1099511627776");
-    CL_HSMqk C (q_, 3, p_, fud_, true);
+    BICYCL::Mpz seed;
+    auto T = std::chrono::system_clock::now();
+    seed = static_cast<unsigned long>(T.time_since_epoch().count());
+    randgen.set_seed(seed);
+
+    CL_HSMqk C(generate_C());
 
     BIGNUM* message_bn = BN_new();
     BN_hex2bn(&message_bn, message);
@@ -105,10 +124,7 @@ const char* encrypt(const char* pk_str, const char* message){
 }
 
 const char* decrypt(const char* sk_str, const char* cipher_str){
-    Mpz q_ ("327363684155478005108109425111633537273");
-    Mpz p_ ("3");
-    Mpz fud_ ("1099511627776");
-    CL_HSMqk C (q_, 3, p_, fud_, true);
+    CL_HSMqk C(generate_C());
 
     BICYCL::Mpz sk_mpz (sk_str);
     CL_HSMqk::SecretKey sk = C.keygen(sk_mpz);
@@ -185,8 +201,8 @@ void test_encrypt_with_r(){
 
 void test_run_time(){
     auto start = std::chrono::steady_clock::now();
-    for(int i = 0; i < 100; i++){
-        test_encrypt_with_r();
+    for(int i = 0; i < 1000; i++){
+       generate_C();
     }
     auto end = std::chrono::steady_clock::now();
     auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
@@ -194,18 +210,33 @@ void test_run_time(){
 }
 
 int main(){
+    RandGen randgen;
+    BICYCL::Mpz seed;
+    auto T = std::chrono::system_clock::now();
+    seed = static_cast<unsigned long>(T.time_since_epoch().count());
+    randgen.set_seed(seed);
+
+    CL_HSMqk C(generate_C());
+
+    using PublicKey = typename CL_HSMqk::PublicKey;
+    using SecretKey = typename CL_HSMqk::SecretKey;
+    using ClearText = typename CL_HSMqk::ClearText;
+    using CipherText = typename CL_HSMqk::CipherText;
+    BICYCL::Mpz sk_mpz ("3046837242676568429961339102363");
+    
+    SecretKey sk = C.keygen (sk_mpz);
+    PublicKey pk = C.keygen (sk);
+    std::cout << "sk: " << sk << std::endl;
     BIGNUM* message_bn = BN_new();
     BN_hex2bn(&message_bn, "660c690db8f30933d27f482f2e80ed5092998410882163f3b9dae1c2125ede1d");
-    const char* message =  BN_bn2dec(message_bn);
-    BIGNUM* sk_bn = BN_new();
-    BN_hex2bn(&sk_bn, "3bb79bece734a622154c904dce");
-    const char* sk =  BN_bn2dec(sk_bn);
-    std::cout << "message: " << message << std::endl;
-    const char* pk = public_key_gen(sk);
-    std::cout << "pk " << pk << std::endl;
-    const char* cipher = encrypt(pk, message);
-    const char* m = decrypt(sk, cipher);
-    std::cout << "m " << m << std::endl;
+    BICYCL::Mpz message (message_bn);
+    ClearText m (C, message);
+    CipherText c = C.encrypt(pk, m, randgen);
+    std::cout << "c1: " << c.c1() << std::endl;
+    std::cout << "c2: " << c.c2() << std::endl;
+    ClearText t = C.decrypt (sk, c);
+    std::cout << "t: " << t << std::endl;
+    test_run_time();
 }
 /*
 int main(){

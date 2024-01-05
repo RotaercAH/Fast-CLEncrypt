@@ -31,6 +31,40 @@
  * \param[in] compact_variant whether the compact variant is used
  *
  */
+
+inline
+CL_HSMqk::CL_HSMqk (const Mpz &q, size_t k, const Mpz &p, const Mpz &fud_factor, const Mpz &M, const QFI &h, const Mpz &exponent_bound, size_t d, const size_t e, const QFI &h_e_precomp, 
+                     const QFI &h_d_precomp, const QFI &h_de_precomp, bool compact_variant, bool large_message_variant)
+    : q_(q),
+      k_(k),
+      p_(p),
+      Cl_DeltaK_ (compute_DeltaK (q, p)),
+      Cl_Delta_ (compute_Delta (Cl_DeltaK_.discriminant(), q, k_)),
+      compact_variant_ (compact_variant),
+      large_message_variant_(large_message_variant),
+      fud_factor_ (fud_factor),
+      exponent_bound_(exponent_bound),
+      M_(M),
+      h_(h),
+      d_(d),
+      e_(e),
+      h_e_precomp_(h_e_precomp),
+      h_d_precomp_(h_d_precomp),
+      h_de_precomp_(h_de_precomp)
+{
+  /* Checks */
+  if (q_.sgn() <= 0 || not q_.is_prime())
+    throw std::invalid_argument ("q must be a prime");
+  if (p_ != 1UL && (p_.sgn() <= 0 || not p_.is_prime()))
+    throw std::invalid_argument ("p must be 1 or a prime");
+  if ((- p_.mod4() * q_.mod4()) % 4 != 1)
+    throw std::invalid_argument ("-p*q mod 4 must be 1");
+  if (q_.kronecker (p_) != -1)
+    throw std::invalid_argument ("Kronecker symbol of q and p must be -1");
+  if (k_ == 0)
+    throw std::invalid_argument ("k must be positive");
+}
+
 inline
 CL_HSMqk::CL_HSMqk (const Mpz &q, size_t k, const Mpz &p,
                                   const Mpz &fud_factor, bool compact_variant)
@@ -258,6 +292,21 @@ size_t CL_HSMqk::k () const
 
 /* */
 inline
+size_t CL_HSMqk::e () const
+{
+  return e_;
+}
+
+/* */
+inline
+size_t CL_HSMqk::d () const
+{
+  return d_;
+}
+
+
+/* */
+inline
 const Mpz & CL_HSMqk::p () const
 {
   return p_;
@@ -317,6 +366,27 @@ inline
 const QFI & CL_HSMqk::h () const
 {
   return h_;
+}
+
+/* */
+inline
+const QFI & CL_HSMqk::h_e_precomp () const
+{
+  return h_e_precomp_;
+}
+
+/* */
+inline
+const QFI & CL_HSMqk::h_d_precomp () const
+{
+  return h_d_precomp_;
+}
+
+/* */
+inline
+const QFI & CL_HSMqk::h_de_precomp () const
+{
+  return h_de_precomp_;
 }
 
 /* */
