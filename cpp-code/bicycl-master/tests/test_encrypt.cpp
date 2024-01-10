@@ -7,12 +7,12 @@
 #include "../src/bicycl.hpp"
 using namespace BICYCL;
 extern "C" {
-    const char* public_key_gen(const char* sk_str);
-    const char* encrypt_and_decrypt_test(const char* message);
-    const char* encrypt(const char* pk_str, const char* message);
-    const char* decrypt(const char* sk_str, const char* cipher_str);
-    const char* add_ciphertexts(const char* pk_str, const char* cipher_str_first, const char* cipher_str_second);
-    const char* scal_ciphertexts(const char* pk_str, const char* cipher_str, const char* m_str);
+    const char* public_key_gen_cpp(const char* sk_str);
+    const char* encrypt_and_decrypt_test_cpp(const char* message);
+    const char* encrypt_cpp(const char* pk_str, const char* message);
+    const char* decrypt_cpp(const char* sk_str, const char* cipher_str);
+    const char* add_ciphertexts_cpp(const char* pk_str, const char* cipher_str_first, const char* cipher_str_second);
+    const char* scal_ciphertexts_cpp(const char* pk_str, const char* cipher_str, const char* m_str);
 }
 
 std::vector<std::string> splitString(const std::string& s, char delimiter) {
@@ -64,22 +64,22 @@ CL_HSMqk::PublicKey str_to_pk(std::string pk_str){
 }
 
 CL_HSMqk generate_C(){
-    Mpz q_ ("327363684155478005108109425111633537273");
-    Mpz p_ ("3");
+    Mpz q_ ("115792089210356248762697446949407573529996955224135760342422259061068512044369");
+    Mpz p_ ("7");
     Mpz fud_ ("1099511627776");
-    Mpz M_ ("35082577950394243101771455480308837195086416207422866395986335469645130651403699990459815877628197357603732868565417");
-    Mpz exponent_bound_ ("6053567222028239460822845227008");
-    size_t d = 52;
-    size_t e = 27;
-    std::string h_str = "12921288867771414943 1 -2700005060 0 true -982091052466434015324328275334900611819";
-    auto e_precomp_str = "5438419558175809081 1 -1511434731 0 false -982091052466434015324328275334900611819";
-    auto d_precomp_str =  "5115785705323458981 1 899307131 0 false -982091052466434015324328275334900611819";
-    auto de_precomp_str =  "475603144690409619 1 143598731 0 false -982091052466434015324328275334900611819";
-    CL_HSMqk C (q_, 3, p_, fud_, M_, str_to_qfi(h_str), exponent_bound_, d, e, str_to_qfi(e_precomp_str), str_to_qfi(d_precomp_str), str_to_qfi(de_precomp_str), true, true);
+    Mpz M_ ("115792089210356248762697446949407573529996955224135760342422259061068512044369");
+    Mpz exponent_bound_ ("274943655700254057025659698957876137276094883561472");
+    size_t d = 84;
+    size_t e = 43;
+    std::string h_str = "280670455006317297142780913951782675211 1 7913954878590475691 0 true -810544624472493741338882128645853014709978686568950322396955813427479584310583";
+    auto e_precomp_str = "83922144963705800495001663749929770781 2 3422882908567569719 1 true -810544624472493741338882128645853014709978686568950322396955813427479584310583";
+    auto d_precomp_str =  "436481443196091627310237084764734615354 1 16256212019937773053 0 false -810544624472493741338882128645853014709978686568950322396955813427479584310583";
+    auto de_precomp_str =  "249884983147286955634751169591721864979 1 12935238997215073023 0 true -810544624472493741338882128645853014709978686568950322396955813427479584310583";
+    CL_HSMqk C (q_, 1, p_, fud_, M_, str_to_qfi(h_str), exponent_bound_, d, e, str_to_qfi(e_precomp_str), str_to_qfi(d_precomp_str), str_to_qfi(de_precomp_str), true, true);
     return C;
 }
 
-const char* public_key_gen(const char* sk_str){
+const char* public_key_gen_cpp(const char* sk_str){
     CL_HSMqk C(generate_C());
 
     BICYCL::Mpz sk_mpz (sk_str);
@@ -92,7 +92,7 @@ const char* public_key_gen(const char* sk_str){
     return strdup(pk_char);
 }
 
-const char* encrypt(const char* pk_str, const char* message){
+const char* encrypt_cpp(const char* pk_str, const char* message){
     RandGen randgen;
     BICYCL::Mpz seed;
     auto T = std::chrono::system_clock::now();
@@ -100,6 +100,8 @@ const char* encrypt(const char* pk_str, const char* message){
     randgen.set_seed(seed);
 
     CL_HSMqk C(generate_C());
+
+    // CL_HSMqk_ZKAoK zk (C, randgen);
 
     BIGNUM* message_bn = BN_new();
     BN_hex2bn(&message_bn, message);
@@ -115,7 +117,7 @@ const char* encrypt(const char* pk_str, const char* message){
     return strdup(cipher_char);
 }
 
-const char* decrypt(const char* sk_str, const char* cipher_str){
+const char* decrypt_cpp(const char* sk_str, const char* cipher_str){
     CL_HSMqk C(generate_C());
 
     BICYCL::Mpz sk_mpz (sk_str);
@@ -131,7 +133,7 @@ const char* decrypt(const char* sk_str, const char* cipher_str){
 
 }
 
-const char* add_ciphertexts(const char* pk_str, const char* cipher_str_first, const char* cipher_str_second){
+const char* add_ciphertexts_cpp(const char* pk_str, const char* cipher_str_first, const char* cipher_str_second){
     RandGen randgen;
     BICYCL::Mpz seed;
     auto T = std::chrono::system_clock::now();
@@ -154,7 +156,7 @@ const char* add_ciphertexts(const char* pk_str, const char* cipher_str_first, co
     return strdup(res_char);
 }
 
-const char* scal_ciphertexts(const char* pk_str, const char* cipher_str, const char* m_str){
+const char* scal_ciphertexts_cpp(const char* pk_str, const char* cipher_str, const char* m_str){
     RandGen randgen;
     BICYCL::Mpz seed;
     auto T = std::chrono::system_clock::now();
@@ -179,90 +181,133 @@ const char* scal_ciphertexts(const char* pk_str, const char* cipher_str, const c
     return strdup(res_char);
 }
 
-const char* encrypt_and_decrypt_test(const char* message){
-    RandGen randgen;
-    BIGNUM* message_bn = BN_new();
+void test_ecc_calculate(){
+    BN_CTX *ctx = BN_CTX_new();
+    EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
+    const EC_POINT *G = EC_GROUP_get0_generator (group);
+    EC_POINT *smG = EC_POINT_new(group);
+    EC_POINT *T = EC_POINT_new(group);
+    EC_POINT *mG = EC_POINT_new(group);
+    EC_POINT *zmG = EC_POINT_new(group);
+    EC_POINT *e = EC_POINT_new(group);
 
-    BN_hex2bn(&message_bn, message);
-    Mpz q_ ("327363684155478005108109425111633537273");
-    Mpz p_ ("3");
-    Mpz fud_ ("1099511627776");
-    CL_HSMqk C (q_, 3, p_, fud_, true);
+    BIGNUM* sm_bn = BN_new();
+    BN_hex2bn(&sm_bn, "9a8477c3453fe8cc2f521a81e331e13d46c1a9f6ac1a194f57754fc21e8c0ecf");
+    BIGNUM* m_bn = BN_new();
+    BN_hex2bn(&m_bn, "660c690db");
+    BIGNUM* e_bn = BN_new();
+    BN_hex2bn(&e_bn, "2dd96d5cdd1b09d1fa08542ce6dea6e5");
+    BIGNUM* zm_bn = BN_new();
+    BN_mul(zm_bn, e_bn, m_bn, ctx);
+    BN_add(zm_bn, zm_bn, sm_bn); //  zm = sm + em
+    EC_POINT_mul(group, mG, NULL, G, m_bn, ctx); // mG = m * G
 
-    using PublicKey = typename CL_HSMqk::PublicKey;
-    using SecretKey = typename CL_HSMqk::SecretKey;
-    using ClearText = typename CL_HSMqk::ClearText;
-    using CipherText = typename CL_HSMqk::CipherText;
+    // prove
+    EC_POINT_mul(group, smG, NULL, G, sm_bn, ctx); // T = smG =  sm * G 
 
-    const char* sk_char =  "4731285847384423928591964720590";
-    BICYCL::Mpz sk_mpz (sk_char);
-    SecretKey sk = C.keygen (sk_mpz);
-    PublicKey pk = C.keygen (sk);
+    // verify
+    EC_POINT_mul(group, T, NULL, G, zm_bn, ctx); // T = zmG =  zm * G = (sm + em) * G
 
-    std::string pk_str = qfi_to_str(pk.elt()) + ":" + std::to_string(pk.d()) + ":" + std::to_string(pk.e()) + ":" + qfi_to_str(pk.e_precomp()) + ":" + qfi_to_str(pk.d_precomp()) + ":" + qfi_to_str(pk.de_precomp());
-    const char* pk_char = pk_str.c_str();
-    std::cout << "pk_char: " << pk_char << std::endl;
-    BICYCL::Mpz message_mpz (message_bn);
-    ClearText m (C, message_mpz);
-    CipherText c = C.encrypt(pk, m, randgen);
-    ClearText t = C.decrypt (sk, c);
-    std::cout << "t: " << t << std::endl;
-    std::string out_str = t.tostring();
-    const char* out_char = out_str.c_str();
-    return strdup(pk_char);
+    BIGNUM* neg_one = BN_new();
+    BN_one(neg_one);
+    BN_set_negative(neg_one, 1);
+
+    EC_POINT* neg_commit = EC_POINT_new(group);
+    EC_POINT_mul(group, neg_commit, NULL, mG, neg_one, ctx); // neg_commit = -mG
+    EC_POINT_mul(group, neg_commit, NULL, neg_commit, e_bn, ctx); // neg_commit = -emG
+    EC_POINT_add(group, T, T, neg_commit, ctx); // T = zm * G - em * G = sm * G
+
+    auto T_str =  EC_POINT_point2hex(group, T, POINT_CONVERSION_COMPRESSED, ctx);
+    auto smG_str =  EC_POINT_point2hex(group, smG, POINT_CONVERSION_COMPRESSED, ctx);
+
+    std::cout << "T: " << T_str << std::endl;
+    std::cout << "smG: " << smG_str << std::endl;
+
+    char * mG_str  = EC_POINT_point2hex(group, mG, POINT_CONVERSION_COMPRESSED, ctx);
+    std::cout << "mG_str: " << mG_str << std::endl;
 }
 
-void test_encrypt_with_r(){
+void test_run_time(){
     RandGen randgen;
     BICYCL::Mpz seed;
     auto T = std::chrono::system_clock::now();
     seed = static_cast<unsigned long>(T.time_since_epoch().count());
     randgen.set_seed(seed);
-    BIGNUM* range = BN_new();
-    BN_hex2bn(&range, "660c690db8f30933d27f482f2e80ed5092998410882163f3b9dae1c2125ede1d");
-    auto seclevel = SecLevel::_128;
-    auto k = 3;       
-    CL_HSMqk C (seclevel, k, seclevel, randgen);
-    std::cout << C.fud_factor() << std::endl;
-    using PublicKey = typename CL_HSMqk::PublicKey;
-    using SecretKey = typename CL_HSMqk::SecretKey;
-    using ClearText = typename CL_HSMqk::ClearText;
-    using CipherText = typename CL_HSMqk::CipherText;
-    SecretKey sk = C.keygen (randgen);
-    PublicKey pk = C.keygen (sk);
-    BIGNUM* message_bn = BN_new();
-    BN_rand_range(message_bn, range);
-    BICYCL::Mpz message (message_bn);
-    ClearText m (C, message);
-    auto random = C.q();
-    CipherText c = C.encrypt(pk, m, random);
-    ClearText t = C.decrypt (sk, c);
-}
-
-void test_run_time(){
-    auto pk =  public_key_gen("3046837242676568429961339102363");
-    auto cipher_a = encrypt(pk, "ff");
-    auto cipher_b = encrypt(pk, "2");
-    auto cipher_add = add_ciphertexts(pk, cipher_a, cipher_b);
-    auto cipher_scal = scal_ciphertexts(pk, cipher_b, "3");
+    CL_HSMqk C(generate_C());
+    CL_HSMqk::SecretKey sk = C.keygen(randgen);
+    CL_HSMqk::PublicKey pk = C.keygen(sk);
+    CL_HSMqk::ClearText m (C, randgen);
+    std::cout << "m: " << m << std::endl;
     auto start = std::chrono::steady_clock::now();
     for(int i = 0; i < 1000; i++){
-       auto m_add = decrypt("3046837242676568429961339102363", cipher_add);
+         CL_HSMqk::CipherText c = C.encrypt(pk, m, randgen);
     }
     auto end = std::chrono::steady_clock::now();
     auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout << "gen hsmqk time: " << duration2 << "us" << std::endl;
+    std::cout << "zk encrypt time: " << duration2 << "us" << std::endl;
 }
 
 int main(){
-    auto pk =  public_key_gen("3046837242676568429961339102363");
-    auto cipher_a = encrypt(pk, "ff");
-    auto cipher_b = encrypt(pk, "2");
-    auto cipher_add = add_ciphertexts(pk, cipher_a, cipher_b);
-    auto cipher_scal = scal_ciphertexts(pk, cipher_b, "3");
-    auto m_add = decrypt("3046837242676568429961339102363", cipher_add);
-    auto m_scal = decrypt("3046837242676568429961339102363", cipher_scal);
-    std::cout << "m_add: " << m_add << std::endl;
-    std::cout << "m_scal: " << m_scal << std::endl;
-    test_run_time();
+    RandGen randgen;
+    BICYCL::Mpz seed;
+    auto T = std::chrono::system_clock::now();
+    seed = static_cast<unsigned long>(T.time_since_epoch().count());
+    randgen.set_seed(seed);
+    test_ecc_calculate();
+    // auto pk =  public_key_gen_cpp("76527095233285027606193913571725252597446671752729");
+    // auto cipher_a = encrypt_cpp(pk, "ff");
+    // auto cipher_b = encrypt_cpp(pk, "2");
+    // auto cipher_add = add_ciphertexts_cpp(pk, cipher_a, cipher_b);
+    // auto cipher_scal = scal_ciphertexts_cpp(pk, cipher_b, "3");
+    // auto m_add = decrypt_cpp("76527095233285027606193913571725252597446671752729", cipher_add);
+    // auto m_scal = decrypt_cpp("76527095233285027606193913571725252597446671752729", cipher_scal);
+    // std::cout << "m_add: " << m_add << std::endl;
+    // std::cout << "m_scal: " << m_scal << std::endl;
+    CL_HSMqk C(generate_C());
+    CL_HSMqk_ZKAoK zk(C, randgen);
+    // // test_run_time();
+    CL_HSMqk::SecretKey sk = C.keygen(randgen);
+    CL_HSMqk::PublicKey pk = C.keygen(sk);
+    BIGNUM* message = BN_new();
+    BN_hex2bn(&message, "660c690db");
+    Mpz message_mpz (message);
+    CL_HSMqk::ClearText m (C, message_mpz);
+    std::cout << "m: " << m << std::endl;
+    Mpz r (randgen.random_mpz (C.encrypt_randomness_bound()));
+   
+    CL_HSMqk::CipherText c =  zk.encrypt(pk, m, r);
+    BN_CTX *ctx = BN_CTX_new();
+    EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
+    const EC_POINT *G = EC_GROUP_get0_generator (group);
+    EC_POINT *commit = EC_POINT_new(group);
+    BIGNUM* m_bn = BN_new();
+    BN_dec2bn(&m_bn, m.tostring().c_str());
+    EC_POINT_mul(group, commit, NULL, G, m_bn, ctx);
+
+    auto proof = zk.cl_ecc_proof(pk, c, commit, m, r, randgen);
+    auto verify = zk.cl_ecc_verify(pk, c, commit, proof);
+    std::cout << "zkp res: " << verify << std::endl;
+    // auto proof = zpk.noninteractive_proof(pk, c, m, r, randgen);
+    // auto verify = zpk.noninteractive_verify(pk, c, proof);
+  
+    // const char* sk_char =  "4731285847384423928591964720590";
+    // BICYCL::Mpz sk_mpz (sk_char);
+    // CL_HSMqk::SecretKey sk = C.keygen (sk_mpz);
+    // CL_HSMqk::PublicKey pk = C.keygen (sk);
+
+    // CL_HSMqk_ZKAoK zk (C, randgen);
+
+    // BIGNUM* message_bn = BN_new();
+    // BN_hex2bn(&message_bn, "660c690db8f30933d27f482f2e80ed5092998410882163f3b9dae1c2125ede1d");
+    // BICYCL::Mpz message (message_bn);
+    // CL_HSMqk::ClearText m (C, message);
+
+    // Mpz r ("3971145550799047016767358266139");
+    // CL_HSMqk::CipherText c = zk.encrypt (pk, m, r);
+    // std::cout << "c1: " << c.c1() << std::endl;
+    // std::cout << "c2: " << c.c2() << std::endl;
+    // CL_HSMqk_ZKAoK::Proof p = zk.noninteractive_proof (pk, c, m, r, randgen);
+
+    // auto verify = zk.noninteractive_verify (pk, c, p);
+    // std::cout << "verify: " << verify << std::endl;
 }
