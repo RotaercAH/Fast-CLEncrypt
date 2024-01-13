@@ -977,6 +977,182 @@ CL_HSMqk::Genus CL_HSMqk::genus (const QFI &f) const
 }
 
 /* */
+inline
+CL_HSMqk::CL_ECC_Proof CL_HSMqk::cl_ecc_proof (const PublicKey &pk,
+                                                            const CipherText &c,
+                                                            const EC_POINT *commit,
+                                                            const ClearText &m,
+                                                            const Mpz &r,
+                                                            RandGen &randgen)
+                                                            const
+{
+  return CL_ECC_Proof (*this, pk, c, commit, m, r, randgen);
+}
+
+/* */
+inline
+bool CL_HSMqk::cl_ecc_verify (const PublicKey &pk,
+                                            const CipherText &c,
+                                            const EC_POINT *commit,
+                                            const CL_ECC_Proof &proof) const
+{
+  return proof.CL_ECC_verify (*this, pk, c, commit);
+}
+
+/* */
+CL_HSMqk::CL_ECC_Proof::CL_ECC_Proof (const CL_HSMqk &C, const PublicKey &pk,
+                              const CipherText &c, const EC_POINT *commit, const ClearText &m,
+                              const Mpz &r, RandGen &randgen)
+{
+  Mpz B (C.exponent_bound_);
+  Mpz::mul (B, B, C.fud_factor_);
+
+  BN_CTX *ctx = BN_CTX_new();
+  EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
+  const EC_POINT *G = EC_GROUP_get0_generator (group);
+  
+  Mpz sr (randgen.random_mpz (B));
+  Mpz sm (randgen.random_mpz (C.M_));
+  BIGNUM* sm_bn = BN_new();
+  BN_dec2bn(&sm_bn, sm.tostring().c_str());
+
+  EC_POINT *T = EC_POINT_new(group);
+  EC_POINT_mul(group, T, NULL, G, sm_bn, ctx); // T = sm * G
+  CipherText t (C.encrypt (pk, ClearText (C, sm), sr));
+
+  /* Generate k using hash function */
+  e_ = generate_hash (C, pk, c, T, t.c1(), t.c2());
+  Mpz::mod (e_, e_, C.exponent_bound_);
+
+  Mpz::mul (zr_, e_, r);
+  Mpz::add (zr_, zr_, sr);
+
+  Mpz::mul (zm_, e_, m);
+  Mpz::add (zm_, zm_, sm);
+  Mpz::mod (zm_, zm_, C.M_);
+}
+
+/* */
+bool CL_HSMqk::CL_ECC_Proof::CL_ECC_verify (const CL_HSMqk &C,
+                                    const PublicKey &pk, 
+                                    const CipherText &c, const EC_POINT *commit) const
+{
+  bool ret = true;
+
+  /* Check that pk is a form in G */
+  ret &= pk.elt().discriminant() == C.Cl_G().discriminant();
+  ret &= C.genus (pk.elt()) == CL_HSMqk::Genus ({ 1, 1 });
+
+  /* Check that c1 is a form in G */
+  ret &= c.c1().discriminant() == C.Cl_G().discriminant();
+  ret &= C.genus (c.c1()) == CL_HSMqk::Genus ({ 1, 1 });
+
+  /* Check that c2 */
+  ret &= c.c2().discriminant() == C.Cl_Delta().discriminant();
+  ret &= C.genus (c.c2()) == CL_HSMqk::Genus ({ 1, 1 });
+
+  /* Check zr bound */
+  Mpz B (C.fud_factor_);
+  Mpz::add (B, B, 1UL);
+  Mpz::mul (B, B, C.exponent_bound_);
+  Mpz::mul (B, B, C.exponent_bound_);
+  ret &= (zr_.sgn() >= 0 && zr_ <= B);
+
+  /* Check zm bound */
+  ret &= (zm_.sgn() >= 0 && zm_ < C.M_);
+
+  /* cu = (gq^zr, pk^zr f^zm) */
+  CipherText cu (C.encrypt (pk, ClearText (C, zm_), zr_));
+
+  /* ck = (c1^e, c2^e) */
+  CipherText ck (C.scal_ciphertexts (pk, c, e_, Mpz (0UL)));
+
+  BN_CTX *ctx = BN_CTX_new();
+  EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
+  const EC_POINT *G = EC_GROUP_get0_generator (group);
+
+  EC_POINT *T =  EC_POINT_new(group);
+  QFI t1, t2;
+
+   /* Using the equality zm * G == T + commit * k to compute T */
+  BIGNUM* zm_bn = BN_new();
+  BIGNUM* e_bn = BN_new();
+  BN_dec2bn(&zm_bn, zm_.tostring().c_str());
+  BN_dec2bn(&e_bn, e_.tostring().c_str());
+
+  EC_POINT_mul(group, T, NULL, G, zm_bn, ctx); // zm * G
+
+  BIGNUM* neg_one = BN_new();
+  BN_one(neg_one);
+  BN_set_negative(neg_one, 1);
+
+  EC_POINT* neg_commit = EC_POINT_new(group);
+
+  EC_POINT_mul(group, neg_commit, NULL, commit, neg_one, ctx);
+  EC_POINT_mul(group, neg_commit, NULL, neg_commit, e_bn, ctx);
+  EC_POINT_add(group, T, T, neg_commit, ctx);
+
+  /* Using the equality gq^zr == t1*c1^e to compute t1 */
+  C.Cl_G().nucompinv (t1, cu.c1(), ck.c1());
+
+  /* Using the equality pk^zr f^zm == t2*c2^e to compute t2 */
+  C.Cl_Delta().nucompinv (t2, cu.c2(), ck.c2());
+
+  /* Generate e using hash function and check that it matches */
+  Mpz e (generate_hash (C, pk, c, T, t1, t2));
+  Mpz::mod (e, e, C.exponent_bound_);
+
+  ret &= (e == e_);
+
+  return ret;
+}
+
+/* */
+inline
+CL_HSMqk::CL_ECC_Proof::CL_ECC_Proof(const Mpz zm, const Mpz zr, const Mpz e) : zm_(zm), zr_(zr), e_(e) {}
+
+/* */
+std::string CL_HSMqk::CL_ECC_Proof::toString () const {
+  return zm_.tostring() + " " + zr_.tostring() + " " + e_.tostring();
+}
+
+std::string qfi2string(const QFI &qfi){
+    auto qfi_comp = qfi.compressed_repr();
+    const std::string is_neg = (qfi_comp.is_neg) ? "true" : "false";
+    auto out = qfi_comp.ap.tostring() + " " + qfi_comp.g.tostring() + " " + qfi_comp.tp.tostring() + " " + qfi_comp.b0.tostring() + " " + is_neg + " " + qfi.discriminant().tostring();
+    return out;
+}
+
+/* */
+inline
+Mpz CL_HSMqk::CL_ECC_Proof::generate_hash (const CL_HSMqk &C,
+                                        const PublicKey &pk,
+                                        const CipherText &c, const EC_POINT *T,
+                                        const QFI &t1, const QFI &t2) const
+{
+    BN_CTX *ctx = BN_CTX_new();
+    EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
+    std::string pk_str = qfi2string(pk.elt()) + ":" + std::to_string(pk.d()) + ":" + std::to_string(pk.e()) + ":" + qfi2string(pk.e_precomp()) + ":" + qfi2string(pk.d_precomp()) + ":" + qfi2string(pk.de_precomp());
+    std::string c_str = qfi2string(c.c1()) + qfi2string(c.c2());
+    auto T_str = EC_POINT_point2hex(group, T, POINT_CONVERSION_COMPRESSED, ctx);
+    auto input = pk_str + c_str + T_str + qfi2string(t1) + qfi2string(t2);
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256_CTX sha256;
+    
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, input.c_str(), input.length());
+    SHA256_Final(hash, &sha256);
+    std::stringstream ss;
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+        ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
+    }
+    
+    BIGNUM *res = BN_new();
+    BN_hex2bn(&res, ss.str().c_str());
+    return Mpz (BN_bn2dec(res));
+}
+
+/* */
 template <>
 void OpenSSL::HashAlgo::hash_update (const CL_HSMqk::PublicKey &pk)
 {
@@ -1015,6 +1191,7 @@ CL_HSMqk_ZKAoK::CL_HSMqk_ZKAoK (const CL_HSMqk &cryptosystem, size_t C_exp2,
   }
 }
 
+
 /* */
 inline
 CL_HSMqk_ZKAoK::CL_HSMqk_ZKAoK (const CL_HSMqk &cryptosystem, size_t C_exp2,
@@ -1049,138 +1226,6 @@ bool CL_HSMqk_ZKAoK::noninteractive_verify (const PublicKey &pk,
                                             const Proof &proof) const
 {
   return proof.verify (*this, pk, c);
-}
-
-/* */
-inline
-CL_HSMqk_ZKAoK::CL_ECC_Proof CL_HSMqk_ZKAoK::cl_ecc_proof (const PublicKey &pk,
-                                                            const CipherText &c,
-                                                            const EC_POINT *commit,
-                                                            const ClearText &m,
-                                                            const Mpz &r,
-                                                            RandGen &randgen)
-                                                            const
-{
-  return CL_ECC_Proof (*this, pk, c, commit, m, r, randgen);
-}
-
-/* */
-inline
-bool CL_HSMqk_ZKAoK::cl_ecc_verify (const PublicKey &pk,
-                                            const CipherText &c,
-                                            const EC_POINT *commit,
-                                            const CL_ECC_Proof &proof) const
-{
-  return proof.CL_ECC_verify (*this, pk, c, commit);
-}
-
-/* */
-CL_HSMqk_ZKAoK::CL_ECC_Proof::CL_ECC_Proof (const CL_HSMqk_ZKAoK &C, const PublicKey &pk,
-                              const CipherText &c, const EC_POINT *commit, const ClearText &m,
-                              const Mpz &r, RandGen &randgen)
-{
-  Mpz B (C.exponent_bound_);
-  Mpz::mulby2k (B, B, C.C_exp2_);
-  Mpz::mul (B, B, C.fud_factor_);
-
-  BN_CTX *ctx = BN_CTX_new();
-  EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
-  const EC_POINT *G = EC_GROUP_get0_generator (group);
-  
-  Mpz sr (randgen.random_mpz (B));
-  Mpz sm (randgen.random_mpz (C.M_));
-  BIGNUM* sm_bn = BN_new();
-  BN_dec2bn(&sm_bn, sm.tostring().c_str());
-
-  EC_POINT *T = EC_POINT_new(group);
-  EC_POINT_mul(group, T, NULL, G, sm_bn, ctx); // T = sm * G
-  CipherText t (C.encrypt (pk, ClearText (C, sm), sr));
-
-  /* Generate k using hash function */
-  e_ = generate_hash (C, pk, c, T, t.c1(), t.c2());
-  Mpz::mod (e_, e_, C.exponent_bound_);
-
-  Mpz::mul (zr_, e_, r);
-  Mpz::add (zr_, zr_, sr);
-
-  Mpz::mul (zm_, e_, m);
-  Mpz::add (zm_, zm_, sm);
-  Mpz::mod (zm_, zm_, C.M_);
-}
-
-/* */
-bool CL_HSMqk_ZKAoK::CL_ECC_Proof::CL_ECC_verify (const CL_HSMqk_ZKAoK &C,
-                                    const PublicKey &pk,
-                                    const CipherText &c, const EC_POINT *commit) const
-{
-  bool ret = true;
-
-  /* Check that pk is a form in G */
-  ret &= pk.elt().discriminant() == C.Cl_G().discriminant();
-  ret &= C.genus (pk.elt()) == CL_HSMqk::Genus ({ 1, 1 });
-
-  /* Check that c1 is a form in G */
-  ret &= c.c1().discriminant() == C.Cl_G().discriminant();
-  ret &= C.genus (c.c1()) == CL_HSMqk::Genus ({ 1, 1 });
-
-  /* Check that c2 */
-  ret &= c.c2().discriminant() == C.Cl_Delta().discriminant();
-  ret &= C.genus (c.c2()) == CL_HSMqk::Genus ({ 1, 1 });
-
-  /* Check zr bound */
-  Mpz B (C.fud_factor_);
-  Mpz::add (B, B, 1UL);
-  Mpz::mulby2k (B, B, C.C_exp2_);
-  Mpz::mul (B, B, C.exponent_bound_);
-  ret &= (zr_.sgn() >= 0 && zr_ <= B);
-
-  /* Check zm bound */
-  ret &= (zm_.sgn() >= 0 && zm_ < C.M_);
-
-  /* cu = (gq^zr, pk^zr f^zm) */
-  CipherText cu (C.encrypt (pk, ClearText (C, zm_), zr_));
-
-  /* ck = (c1^e, c2^e) */
-  CipherText ck (C.scal_ciphertexts (pk, c, e_, Mpz (0UL)));
-
-  BN_CTX *ctx = BN_CTX_new();
-  EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
-  const EC_POINT *G = EC_GROUP_get0_generator (group); 
-
-  EC_POINT *T =  EC_POINT_new(group);
-  QFI t1, t2;
-
-   /* Using the equality zm * G == T + commit * k to compute T */
-  BIGNUM* zm_bn = BN_new();
-  BIGNUM* e_bn = BN_new();
-  BN_dec2bn(&zm_bn, zm_.tostring().c_str());
-  BN_dec2bn(&e_bn, e_.tostring().c_str());
-
-  EC_POINT_mul(group, T, NULL, G, zm_bn, ctx); // zm * G
-
-  BIGNUM* neg_one = BN_new();
-  BN_one(neg_one);
-  BN_set_negative(neg_one, 1);
-
-  EC_POINT* neg_commit = EC_POINT_new(group);
-
-  EC_POINT_mul(group, neg_commit, NULL, commit, neg_one, ctx);
-  EC_POINT_mul(group, neg_commit, NULL, neg_commit, e_bn, ctx);
-  EC_POINT_add(group, T, T, neg_commit, ctx);
-
-  /* Using the equality gq^zr == t1*c1^e to compute t1 */
-  C.Cl_G().nucompinv (t1, cu.c1(), ck.c1());
-
-  /* Using the equality pk^zr f^zm == t2*c2^e to compute t2 */
-  C.Cl_Delta().nucompinv (t2, cu.c2(), ck.c2());
-
-  /* Generate e using hash function and check that it matches */
-  Mpz e (generate_hash (C, pk, c, T, t1, t2));
-  Mpz::mod (e, e, C.exponent_bound_);
-
-  ret &= (e == e_);
-
-  return ret;
 }
 
 /* */
@@ -1266,36 +1311,4 @@ Mpz CL_HSMqk_ZKAoK::Proof::k_from_hash (const CL_HSMqk_ZKAoK &C,
 {
   return Mpz (C.H_ (pk, c, t1, t2), C.C_exp2_);
 }
-
-/* */
-inline
-Mpz CL_HSMqk_ZKAoK::CL_ECC_Proof::generate_hash (const CL_HSMqk_ZKAoK &C,
-                                        const PublicKey &pk,
-                                        const CipherText &c, const EC_POINT *T,
-                                        const QFI &t1, const QFI &t2) const
-{
-    BN_CTX *ctx = BN_CTX_new();
-    EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
-
-    Mpz hash_ (C.H_ (pk, c, t1, t2), C.C_exp2_);
-    auto T_str = EC_POINT_point2hex(group, T, POINT_CONVERSION_COMPRESSED, ctx);
-    auto input = hash_.tostring() + T_str;
-    unsigned char hash[SHA256_DIGEST_LENGTH];
-    SHA256_CTX sha256;
-    
-    SHA256_Init(&sha256);
-    SHA256_Update(&sha256, input.c_str(), input.length());
-    SHA256_Final(hash, &sha256);
-    std::stringstream ss;
-    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
-        ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
-    }
-    
-    BIGNUM *res = BN_new();
-    BN_hex2bn(&res, ss.str().c_str());
-    return Mpz (BN_bn2dec(res));
-}
-
-
-
 #endif /* CL_HSM_INL__ */

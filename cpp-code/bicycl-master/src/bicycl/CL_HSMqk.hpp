@@ -285,6 +285,39 @@ namespace BICYCL
       /** Print the public parameters of the cryptosystem */
       friend std::ostream & operator<< (std::ostream &, const CL_HSMqk &);
 
+      class CL_ECC_Proof
+      {
+        protected:
+          Mpz zm_;
+          Mpz zr_;
+          Mpz e_;
+
+        public:
+          CL_ECC_Proof (const CL_HSMqk &C, const PublicKey &pk,
+                 const CipherText &c, const EC_POINT *commit, const ClearText &m, const Mpz &r, 
+                 RandGen &randgen);
+          
+          CL_ECC_Proof (const Mpz zm, const Mpz zr, const Mpz e);
+
+          bool CL_ECC_verify (const CL_HSMqk &, const PublicKey &pk,
+                       const CipherText &, const EC_POINT *commit) const;
+
+          std::string toString() const;
+          
+
+        protected:
+          Mpz generate_hash (const CL_HSMqk &C, const PublicKey &pk,
+                           const CipherText &c, const EC_POINT *T, const QFI &t1,
+                           const QFI &t2) const;
+      };
+
+       /* */
+      CL_ECC_Proof cl_ecc_proof (const PublicKey &pk, const CipherText &c, const EC_POINT *commit,
+                                  const ClearText &m, const Mpz &r,
+                                  RandGen &randgen) const;
+      bool cl_ecc_verify (const PublicKey &pk, const CipherText &c, const EC_POINT *commit,
+                                  const CL_ECC_Proof &proof) const;
+
     protected:
       /* utils for ctor */
       static Mpz random_p (RandGen &randgen, const Mpz &q, size_t DeltaK_nbits);
@@ -294,31 +327,6 @@ namespace BICYCL
       void raise_to_power_M (const ClassGroup &Cl, QFI &f) const;
       void F_kerphi_pow (Mpz &, const Mpz &, const Mpz &) const;
       size_t F_kerphi_div (Mpz &, const Mpz &, size_t, const Mpz &) const;
-
-      // class Proof
-      // {
-      //   protected:
-      //     Mpz zr_;
-      //     Mpz zm_;
-      //     Mpz e_;
-      //   public:
-      //     Proof (const CL_HSMqk &C, const PublicKey &pk,
-      //            const CipherText &c, const ClearText &m, const Mpz &r, const EC_POINT &commit,
-      //            RandGen &randgen);
-      //     bool verify (const CL_HSMqk &, const PublicKey &pk,
-      //            const CipherText &, const EC_POINT *commit) const;
-      //   protected:
-      //     Mpz generate_hash (const CL_HSMqk &C, const PublicKey &pk,
-      //                      const CipherText &c, const QFI &t1,
-      //                      const QFI &t2) const;
-      // };
-
-      // /* */
-      // Proof CL_ECC_proof (const PublicKey &pk, const CipherText &c,
-      //                             const ClearText &a, const Mpz &r,
-      //                             RandGen &randgen) const;
-      // bool CL_ECC_verify (const PublicKey &pk, const CipherText &c,
-      //                             const Proof &proof) const;
   };
 
   class CL_HSMqk_ZKAoK : protected CL_HSMqk
@@ -334,6 +342,9 @@ namespace BICYCL
       using CL_HSMqk::CipherText;
       using CL_HSMqk::keygen;
       using CL_HSMqk::encrypt;
+      using CL_HSMqk::decrypt;
+      using CL_HSMqk::add_ciphertexts;
+      using CL_HSMqk::scal_ciphertexts;
       using CL_HSMqk::encrypt_randomness_bound;
 
       /* ctor */
@@ -364,40 +375,12 @@ namespace BICYCL
                            const QFI &t2) const;
       };
 
-      class CL_ECC_Proof
-      {
-        protected:
-          Mpz zr_;
-          Mpz zm_;
-          Mpz e_;
-
-        public:
-          CL_ECC_Proof (const CL_HSMqk_ZKAoK &C, const PublicKey &pk,
-                 const CipherText &c, const EC_POINT *commit, const ClearText &m, const Mpz &r, 
-                 RandGen &randgen);
-
-          bool CL_ECC_verify (const CL_HSMqk_ZKAoK &, const PublicKey &pk,
-                       const CipherText &, const EC_POINT *commit) const;
-
-        protected:
-          Mpz generate_hash (const CL_HSMqk_ZKAoK &C, const PublicKey &pk,
-                           const CipherText &c, const EC_POINT *T, const QFI &t1,
-                           const QFI &t2) const;
-      };
-
       /* */
       Proof noninteractive_proof (const PublicKey &pk, const CipherText &c,
                                   const ClearText &a, const Mpz &r,
                                   RandGen &randgen) const;
       bool noninteractive_verify (const PublicKey &pk, const CipherText &c,
                                   const Proof &proof) const;
-
-      /* */
-      CL_ECC_Proof cl_ecc_proof (const PublicKey &pk, const CipherText &c, const EC_POINT *commit,
-                                  const ClearText &m, const Mpz &r,
-                                  RandGen &randgen) const;
-      bool cl_ecc_verify (const PublicKey &pk, const CipherText &c, const EC_POINT *commit,
-                                  const CL_ECC_Proof &proof) const;
   };
 
 
