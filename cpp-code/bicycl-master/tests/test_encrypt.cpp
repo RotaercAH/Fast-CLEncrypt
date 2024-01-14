@@ -103,8 +103,6 @@ const char* public_key_gen_cpp(const char* sk_str){
 const char* encrypt_cpp(const char* pk_str, const char* message, const char* random){
     CL_HSMqk C(generate_C());
 
-    // BIGNUM * r =  BN_new();
-    // BN_hex2bn(&r, random);
     CL_HSMqk::ClearText  m (C, Mpz (message));
 
     CL_HSMqk::PublicKey pk =  str_to_pk(pk_str);
@@ -192,6 +190,9 @@ const char* cl_ecc_prove_cpp(const char* pk_str, const char* cipher_str, const c
     BN_CTX *ctx = BN_CTX_new();
     EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
     EC_POINT *commit = EC_POINT_hex2point(group, commit_str, NULL, ctx);
+    
+    auto commit_str_ =  EC_POINT_point2hex(group, commit, POINT_CONVERSION_COMPRESSED, ctx);
+    std::cout << "commit_proof_str: " << commit_str_ << std::endl;
 
     BICYCL::CL_HSMqk::ClearText m (C, Mpz (m_str));
 
@@ -219,6 +220,9 @@ const char* cl_ecc_verify_cpp(const char* proof_str, const char* pk_str, const c
     BN_CTX *ctx = BN_CTX_new();
     EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
     EC_POINT *commit = EC_POINT_hex2point(group, commit_str, NULL, ctx);
+
+    auto commit_str_ =  EC_POINT_point2hex(group, commit, POINT_CONVERSION_COMPRESSED, ctx);
+    std::cout << "commit_verify_str: " << commit_str_ << std::endl;
 
     auto verify = C.cl_ecc_verify(pk, c, commit, proof);
     const std::string res = (verify) ? "true" : "false";
@@ -281,6 +285,8 @@ int main(){
     BN_dec2bn(&m_bn, "123");
     BN_CTX *ctx = BN_CTX_new();
     EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
+    auto order = EC_GROUP_get0_order(group);
+    std::cout << "order: " << order << std::endl;
     const EC_POINT *G = EC_GROUP_get0_generator(group);
     auto g_str = EC_POINT_point2hex(group, G, POINT_CONVERSION_UNCOMPRESSED, ctx);
     std::cout << "g_str: " << g_str << std::endl;
