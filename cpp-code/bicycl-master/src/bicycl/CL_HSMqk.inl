@@ -1050,17 +1050,15 @@ bool CL_HSMqk::CL_ECC_Proof::CL_ECC_verify (const CL_HSMqk &C,
   /* Check that c2 */
   ret &= c.c2().discriminant() == C.Cl_Delta().discriminant();
   ret &= C.genus (c.c2()) == CL_HSMqk::Genus ({ 1, 1 });
-
+  
   /* Check zr bound */
   Mpz B (C.fud_factor_);
   Mpz::add (B, B, 1UL);
   Mpz::mul (B, B, C.exponent_bound_);
   Mpz::mul (B, B, C.exponent_bound_);
   ret &= (zr_.sgn() >= 0 && zr_ <= B);
-
   /* Check zm bound */
   ret &= (zm_.sgn() >= 0 && zm_ < C.M_);
-
   /* cu = (gq^zr, pk^zr f^zm) */
   CipherText cu (C.encrypt (pk, ClearText (C, zm_), zr_));
 
