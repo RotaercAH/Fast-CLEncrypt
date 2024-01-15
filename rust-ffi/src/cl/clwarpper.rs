@@ -78,7 +78,7 @@ pub fn scal_ciphertexts(pk: String, cipher: String, message: String) -> String{
     let c_str = CString::new(cipher).unwrap();
     let m_str = CString::new(message).unwrap();
     unsafe{
-        return c_char_decode(add_ciphertexts_cpp(pk_str.as_ptr(), c_str.as_ptr(), m_str.as_ptr()));
+        return c_char_decode(scal_ciphertexts_cpp(pk_str.as_ptr(), c_str.as_ptr(), m_str.as_ptr()));
     }
 }
 

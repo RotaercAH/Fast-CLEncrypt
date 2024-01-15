@@ -1042,28 +1042,25 @@ bool CL_HSMqk::CL_ECC_Proof::CL_ECC_verify (const CL_HSMqk &C,
   /* Check that pk is a form in G */
   ret &= pk.elt().discriminant() == C.Cl_G().discriminant();
   ret &= C.genus (pk.elt()) == CL_HSMqk::Genus ({ 1, 1 });
-  std::cout << "ret1: " << ret << std::endl;
-
 
   /* Check that c1 is a form in G */
   ret &= c.c1().discriminant() == C.Cl_G().discriminant();
   ret &= C.genus (c.c1()) == CL_HSMqk::Genus ({ 1, 1 });
-  std::cout << "ret2: " << ret << std::endl;
 
   /* Check that c2 */
   ret &= c.c2().discriminant() == C.Cl_Delta().discriminant();
   ret &= C.genus (c.c2()) == CL_HSMqk::Genus ({ 1, 1 });
-  std::cout << "ret3: " << ret << std::endl;
+
   /* Check zr bound */
   Mpz B (C.fud_factor_);
   Mpz::add (B, B, 1UL);
   Mpz::mul (B, B, C.exponent_bound_);
   Mpz::mul (B, B, C.exponent_bound_);
   ret &= (zr_.sgn() >= 0 && zr_ <= B);
-  std::cout << "ret4: " << ret << std::endl;
+
   /* Check zm bound */
   ret &= (zm_.sgn() >= 0 && zm_ < C.M_);
-  std::cout << "ret5: " << ret << std::endl;
+
   /* cu = (gq^zr, pk^zr f^zm) */
   CipherText cu (C.encrypt (pk, ClearText (C, zm_), zr_));
 
@@ -1106,7 +1103,6 @@ bool CL_HSMqk::CL_ECC_Proof::CL_ECC_verify (const CL_HSMqk &C,
   Mpz::mod (e, e, C.exponent_bound_);
 
   ret &= (e == e_);
-  std::cout << "ret6: " << ret << std::endl;
   return ret;
 }
 

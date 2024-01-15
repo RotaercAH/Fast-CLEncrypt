@@ -64,7 +64,7 @@ CL_HSMqk::PublicKey str_to_pk(std::string pk_str){
     return pk;
 }
 
-CL_HSMqk generate_C(){
+CL_HSMqk generate_C_secp256r1(){
     Mpz q_ ("115792089210356248762697446949407573529996955224135760342422259061068512044369");
     Mpz p_ ("7");
     Mpz fud_ ("1099511627776");
@@ -80,12 +80,21 @@ CL_HSMqk generate_C(){
     return C;
 }
 
-// CL_HSMqk_ZKAoK generate_zk(){
-//     CL_HSMqk C(generate_C());
-//     Mpz random ("159084427090018101437667879809210211166256988396131");
-//     CL_HSMqk_ZKAoK zk(C, 128, random);
-//     return zk;
-// }
+CL_HSMqk generate_C(){
+    Mpz q_ ("115792089237316195423570985008687907852837564279074904382605163141518161494337");
+    Mpz p_ ("7");
+    Mpz fud_ ("1099511627776");
+    Mpz M_ ("115792089237316195423570985008687907852837564279074904382605163141518161494337");
+    Mpz exponent_bound_ ("519825222697581994973081647134787959795934971297792");
+    size_t d = 85;
+    size_t e = 43;
+    std::string h_str = "144981785181062899352360633526556264162 1 -3094606589199551713 0 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
+    auto e_precomp_str = "29430119204407461226734121732711590338 1 1396069299632702381 0 true -810544624661213367964996895060815354969862949953524330678236141990627130460359";
+    auto d_precomp_str =  "77604097034434070520838802221803506438 1 113927739220299871 0 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
+    auto de_precomp_str =  "3201118217763513943109252430225497086 115 89241095639766715 29 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
+    CL_HSMqk C (q_, 1, p_, fud_, M_, str_to_qfi(h_str), exponent_bound_, d, e, str_to_qfi(e_precomp_str), str_to_qfi(d_precomp_str), str_to_qfi(de_precomp_str), true, true);
+    return C;
+}
 
 const char* public_key_gen_cpp(const char* sk_str){
     CL_HSMqk C = generate_C();
@@ -190,9 +199,6 @@ const char* cl_ecc_prove_cpp(const char* pk_str, const char* cipher_str, const c
     BN_CTX *ctx = BN_CTX_new();
     EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
     EC_POINT *commit = EC_POINT_hex2point(group, commit_str, NULL, ctx);
-    
-    auto commit_str_ =  EC_POINT_point2hex(group, commit, POINT_CONVERSION_COMPRESSED, ctx);
-    std::cout << "commit_proof_str: " << commit_str_ << std::endl;
 
     BICYCL::CL_HSMqk::ClearText m (C, Mpz (m_str));
 
@@ -220,9 +226,6 @@ const char* cl_ecc_verify_cpp(const char* proof_str, const char* pk_str, const c
     BN_CTX *ctx = BN_CTX_new();
     EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
     EC_POINT *commit = EC_POINT_hex2point(group, commit_str, NULL, ctx);
-
-    auto commit_str_ =  EC_POINT_point2hex(group, commit, POINT_CONVERSION_COMPRESSED, ctx);
-    std::cout << "commit_verify_str: " << commit_str_ << std::endl;
 
     auto verify = C.cl_ecc_verify(pk, c, commit, proof);
     const std::string res = (verify) ? "true" : "false";
@@ -254,6 +257,7 @@ void test_run_time(){
     std::cout << "encrypt time: " << duration2 << "us" << std::endl;
 }
 
+
 int main(){
     test_run_time();
 
@@ -262,10 +266,10 @@ int main(){
     auto T = std::chrono::system_clock::now();
     seed = static_cast<unsigned long>(T.time_since_epoch().count());
     randgen.set_seed(seed);
-    auto pk =  public_key_gen_cpp("76527095233285027606193913571725252597446671752729");
+    auto pk =  public_key_gen_cpp("7652709523328502760619391357172525259744667175");
 
     CL_HSMqk C(generate_C());
-    Mpz random ("159084427090018101437667879809210211166256988396131");
+    Mpz random ("1590844270900181014376678798092102111662569883");
     CL_HSMqk_ZKAoK zk(C, 128, random);
 
     Mpz r_a(randgen.random_mpz (zk.encrypt_randomness_bound()));
@@ -274,9 +278,9 @@ int main(){
     auto cipher_a = encrypt_cpp(pk, "123", r_a.tostring().c_str());
     auto cipher_b = encrypt_cpp(pk, "2",  r_b.tostring().c_str());
     auto cipher_add = add_ciphertexts_cpp(pk, cipher_a, cipher_b);
-    auto cipher_scal = scal_ciphertexts_cpp(pk, cipher_b, "3");
-    auto m_add = decrypt_cpp("76527095233285027606193913571725252597446671752729", cipher_add);
-    auto m_scal = decrypt_cpp("76527095233285027606193913571725252597446671752729", cipher_scal);
+    auto cipher_scal = scal_ciphertexts_cpp(pk, cipher_a, "3");
+    auto m_add = decrypt_cpp("7652709523328502760619391357172525259744667175", cipher_add);
+    auto m_scal = decrypt_cpp("7652709523328502760619391357172525259744667175", cipher_scal);
 
     std::cout << "m_add: " << m_add << std::endl;
     std::cout << "m_scal: " << m_scal << std::endl;
@@ -284,12 +288,10 @@ int main(){
     BIGNUM* m_bn = BN_new();
     BN_dec2bn(&m_bn, "123");
     BN_CTX *ctx = BN_CTX_new();
+
     EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
-    auto order = EC_GROUP_get0_order(group);
-    std::cout << "order: " << order << std::endl;
+
     const EC_POINT *G = EC_GROUP_get0_generator(group);
-    auto g_str = EC_POINT_point2hex(group, G, POINT_CONVERSION_UNCOMPRESSED, ctx);
-    std::cout << "g_str: " << g_str << std::endl;
     EC_POINT *commit = EC_POINT_new(group);
     EC_POINT_mul(group, commit, NULL, G, m_bn, ctx);
     auto commit_str =  EC_POINT_point2hex(group, commit, POINT_CONVERSION_COMPRESSED, ctx);
