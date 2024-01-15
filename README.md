@@ -23,8 +23,8 @@ c++接口调用方式参考main.rs
 
 ## 目录结构
 
-- cpp-code/bicycl-master:CL加密库，在该库基础上添加了对公钥、密文的序列化与反序列化功能，便于公钥及密文在网络上传输，添加零知识证明
-- cpp-code/bicycl-master/tests/test-encrypt.cpp:对CL加密库进行封装，输入输出全部使用字符串，便于rust调用
-- rust-ffi/libencrypt.so:编译好的cpp动态库
-- rust-ffi/src/cl/clwarpper.rs:封装cpp接口，便于rust调用
-- rust-ffi/src/main.rs:示例代码与性能测试
+- cpp-code/bicycl-master: CL加密库，在该库基础上添加了对公钥、密文的序列化与反序列化功能，便于公钥及密文在网络上传输，添加零知识证明
+- cpp-code/bicycl-master/tests/test-encrypt.cpp: 对CL加密库进行封装，输入输出全部使用字符串，便于rust调用
+- rust-ffi/libencrypt.so: 编译好的cpp动态库
+- rust-ffi/src/cl/clwarpper.rs: 封装cpp接口，便于rust调用
+- rust-ffi/src/main.rs: 示例代码与性能测试
