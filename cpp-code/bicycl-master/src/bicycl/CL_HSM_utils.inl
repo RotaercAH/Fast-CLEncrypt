@@ -261,6 +261,17 @@ CL_HSM_CipherText<Cryptosystem>::CL_HSM_CipherText (const Cryptosystem &C,
 template <class Cryptosystem>
 inline
 CL_HSM_CipherText<Cryptosystem>::CL_HSM_CipherText (const Cryptosystem &C,
+                                      const CL_HSM_CipherText &ca,
+                                      const CL_HSM_CipherText &cb)
+{
+  C.Cl_Delta().nucomp (c2_, ca.c2_, cb.c2_);
+  C.Cl_G().nucomp (c1_, ca.c1_, cb.c1_);
+}
+
+/* */
+template <class Cryptosystem>
+inline
+CL_HSM_CipherText<Cryptosystem>::CL_HSM_CipherText (const Cryptosystem &C,
                                       const CL_HSM_PublicKey<Cryptosystem> &pk,
                                       const CL_HSM_CipherText &c, const Mpz &s,
                                       const Mpz &r)
@@ -287,6 +298,15 @@ CL_HSM_CipherText<Cryptosystem>::CL_HSM_CipherText (const Cryptosystem &C,
 
   C.Cl_G().nupow (tmp, c.c1_, s);
   C.Cl_G().nucomp (c1_, c1_, tmp);
+}
+
+/* */
+template <class Cryptosystem>
+inline
+CL_HSM_CipherText<Cryptosystem>::CL_HSM_CipherText (const Cryptosystem &C, const CL_HSM_CipherText &c, const Mpz &s)
+{
+  C.Cl_Delta().nupow (c2_, c.c2_, s);
+  C.Cl_G().nupow (c1_, c.c1_, s);
 }
 
 /* */

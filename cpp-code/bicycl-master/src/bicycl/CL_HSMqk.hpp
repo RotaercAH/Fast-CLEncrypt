@@ -270,6 +270,8 @@ namespace BICYCL
       /** Homomorphically add ciphertexts @p ca and @p cb using @p r */
       CipherText add_ciphertexts (const PublicKey &pk, const CipherText &ca,
                                   const CipherText &cb, const Mpz &r) const;
+      /** Homomorphically add ciphertexts @p ca and @p cb without @p r */
+      CipherText add_ciphertexts (const CipherText &ca, const CipherText &cb) const;
       /** Add the two cleartexts @p ma and @p mb */
       ClearText add_cleartexts (const ClearText &ma, const ClearText &mb) const;
       /** Homomorphically compute @p s times @p c */
@@ -278,6 +280,8 @@ namespace BICYCL
       /** Homomorphically compute @p s times @p c using @p r*/
       CipherText scal_ciphertexts (const PublicKey &pk, const CipherText &c,
                                    const Mpz &s, const Mpz &r) const;
+      /** Homomorphically compute @p s times @p c without @p r*/
+      CipherText scal_ciphertexts (const CipherText &c, const Mpz &s) const;
       /** Compute @p s times @p m */
       ClearText scal_cleartexts (const ClearText &m, const Mpz &s) const;
       /**@}*/

@@ -133,6 +133,14 @@ namespace BICYCL
                            const Mpz &,
                            const Mpz &);
 
+        CL_HSM_CipherText (const Cryptosystem &C,
+                           const CL_HSM_CipherText &,
+                           const CL_HSM_CipherText &);
+
+        CL_HSM_CipherText (const Cryptosystem &,
+                           const CL_HSM_CipherText &,
+                           const Mpz &);
+
         CL_HSM_CipherText (const QFI &,
                            const QFI &);
 

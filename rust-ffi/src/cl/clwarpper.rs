@@ -10,8 +10,8 @@ extern "C" {
     pub fn public_key_gen_cpp(sk_str: *const c_char) -> *const c_char;
     pub fn encrypt_cpp(pk_str: *const c_char, message: *const c_char, random: *const c_char) -> *const c_char;
     pub fn decrypt_cpp(sk_str: *const c_char, cipher_str: *const c_char) -> *const c_char;
-    pub fn add_ciphertexts_cpp(pk_str: *const c_char, cipher_str_first: *const c_char, cipher_str_second: *const c_char) -> *const c_char;
-    pub fn scal_ciphertexts_cpp(pk_str: *const c_char, cipher_str: *const c_char, m_str: *const c_char) -> *const c_char;
+    pub fn add_ciphertexts_cpp(cipher_str_first: *const c_char, cipher_str_second: *const c_char) -> *const c_char;
+    pub fn scal_ciphertexts_cpp(cipher_str: *const c_char, m_str: *const c_char) -> *const c_char;
     pub fn cl_ecc_prove_cpp(pk_str: *const c_char, cipher_str: *const c_char , commit_str: *const c_char, m_str: *const c_char, r_str: *const c_char) -> *const c_char;
     pub fn cl_ecc_verify_cpp(proof_str: *const c_char, pk_str: *const c_char, cipher_str: *const c_char , commit_str: *const c_char) -> *const c_char;
 }
@@ -64,21 +64,19 @@ pub fn decrypt(sk: String, cipher: String) -> String{
     }
 }
 
-pub fn add_ciphertexts(pk: String, cipher_first: String, cipher_second: String) -> String{
-    let pk_str = CString::new(pk).unwrap();
+pub fn add_ciphertexts(cipher_first: String, cipher_second: String) -> String{
     let c_first_str = CString::new(cipher_first).unwrap();
     let c_second_str = CString::new(cipher_second).unwrap();
     unsafe{
-        return c_char_decode(add_ciphertexts_cpp(pk_str.as_ptr(), c_first_str.as_ptr(), c_second_str.as_ptr()));
+        return c_char_decode(add_ciphertexts_cpp(c_first_str.as_ptr(), c_second_str.as_ptr()));
     }
 }
 
-pub fn scal_ciphertexts(pk: String, cipher: String, message: String) -> String{
-    let pk_str = CString::new(pk).unwrap();
+pub fn scal_ciphertexts(cipher: String, message: String) -> String{
     let c_str = CString::new(cipher).unwrap();
     let m_str = CString::new(message).unwrap();
     unsafe{
-        return c_char_decode(scal_ciphertexts_cpp(pk_str.as_ptr(), c_str.as_ptr(), m_str.as_ptr()));
+        return c_char_decode(scal_ciphertexts_cpp(c_str.as_ptr(), m_str.as_ptr()));
     }
 }
 

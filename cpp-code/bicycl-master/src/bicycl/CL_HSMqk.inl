@@ -52,17 +52,6 @@ CL_HSMqk::CL_HSMqk (const Mpz &q, size_t k, const Mpz &p, const Mpz &fud_factor,
       h_d_precomp_(h_d_precomp),
       h_de_precomp_(h_de_precomp)
 {
-  /* Checks */
-  if (q_.sgn() <= 0 || not q_.is_prime())
-    throw std::invalid_argument ("q must be a prime");
-  if (p_ != 1UL && (p_.sgn() <= 0 || not p_.is_prime()))
-    throw std::invalid_argument ("p must be 1 or a prime");
-  if ((- p_.mod4() * q_.mod4()) % 4 != 1)
-    throw std::invalid_argument ("-p*q mod 4 must be 1");
-  if (q_.kronecker (p_) != -1)
-    throw std::invalid_argument ("Kronecker symbol of q and p must be -1");
-  if (k_ == 0)
-    throw std::invalid_argument ("k must be positive");
 }
 
 inline
@@ -752,6 +741,14 @@ CL_HSMqk::CipherText CL_HSMqk::add_ciphertexts (const PublicKey &pk,
 
 /* */
 inline
+CL_HSMqk::CipherText CL_HSMqk::add_ciphertexts (const CipherText &ca,
+                                                const CipherText &cb) const
+{
+  return CipherText (*this, ca, cb);
+}
+
+/* */
+inline
 CL_HSMqk::ClearText CL_HSMqk::add_cleartexts (const ClearText &ma,
                                               const ClearText &mb) const
 {
@@ -777,6 +774,14 @@ CL_HSMqk::CipherText CL_HSMqk::scal_ciphertexts (const PublicKey &pk,
                                                  const Mpz &r) const
 {
   return CipherText (*this, pk, c, s, r);
+}
+
+/* */
+inline
+CL_HSMqk::CipherText CL_HSMqk::scal_ciphertexts (const CipherText &c,
+                                                 const Mpz &s) const
+{
+  return CipherText (*this, c, s);
 }
 
 /* */

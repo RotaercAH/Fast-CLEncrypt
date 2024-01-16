@@ -10,8 +10,8 @@ extern "C" {
     const char* public_key_gen_cpp(const char* sk_str);
     const char* encrypt_cpp(const char* pk_str, const char* message, const char* random);
     const char* decrypt_cpp(const char* sk_str, const char* cipher_str);
-    const char* add_ciphertexts_cpp(const char* pk_str, const char* cipher_str_first, const char* cipher_str_second);
-    const char* scal_ciphertexts_cpp(const char* pk_str, const char* cipher_str, const char* m_str);
+    const char* add_ciphertexts_cpp(const char* cipher_str_first, const char* cipher_str_second);
+    const char* scal_ciphertexts_cpp(const char* cipher_str, const char* m_str);
     const char* cl_ecc_prove_cpp(const char* pk_str, const char* cipher_str, const char* commit_str, const char* m_str, const char* r_str);
     const char* cl_ecc_verify_cpp(const char* proof_str, const char* pk_str, const char* cipher_str, const char* commit_str);
 }
@@ -123,15 +123,8 @@ const char* decrypt_cpp(const char* sk_str, const char* cipher_str){
 
 }
 
-const char* add_ciphertexts_cpp(const char* pk_str, const char* cipher_str_first, const char* cipher_str_second){
-    RandGen randgen;
-    BICYCL::Mpz seed;
-    auto T = std::chrono::system_clock::now();
-    seed = static_cast<unsigned long>(T.time_since_epoch().count());
-    randgen.set_seed(seed);
-
-     CL_HSMqk C(generate_C());
-    CL_HSMqk::PublicKey pk = str_to_pk(pk_str);
+const char* add_ciphertexts_cpp(const char* cipher_str_first, const char* cipher_str_second){
+    CL_HSMqk C(generate_C());
 
     std::vector<std::string> cipher_first_vec = splitString(cipher_str_first, ':');
     CL_HSMqk::CipherText c_first(str_to_qfi(cipher_first_vec[0]), str_to_qfi(cipher_first_vec[1]));
@@ -139,27 +132,20 @@ const char* add_ciphertexts_cpp(const char* pk_str, const char* cipher_str_first
     std::vector<std::string> cipher_second_vec = splitString(cipher_str_second, ':');
     CL_HSMqk::CipherText c_second(str_to_qfi(cipher_second_vec[0]), str_to_qfi(cipher_second_vec[1]));
 
-    CL_HSMqk::CipherText res =  C.add_ciphertexts(pk, c_first, c_second, randgen);
+    CL_HSMqk::CipherText res =  C.add_ciphertexts(c_first, c_second);
 
     std::string res_str =  qfi_to_str(res.c1()) + ":" + qfi_to_str(res.c2());
     const char* res_char = res_str.c_str();
     return strdup(res_char);
 }
 
-const char* scal_ciphertexts_cpp(const char* pk_str, const char* cipher_str, const char* m_str){
-    RandGen randgen;
-    BICYCL::Mpz seed;
-    auto T = std::chrono::system_clock::now();
-    seed = static_cast<unsigned long>(T.time_since_epoch().count());
-    randgen.set_seed(seed);
-
+const char* scal_ciphertexts_cpp(const char* cipher_str, const char* m_str){
     CL_HSMqk C(generate_C());
-    CL_HSMqk::PublicKey pk = str_to_pk(pk_str);
 
     std::vector<std::string> cipher_vec = splitString(cipher_str, ':');
     CL_HSMqk::CipherText c(str_to_qfi(cipher_vec[0]), str_to_qfi(cipher_vec[1]));
 
-    CL_HSMqk::CipherText res = C.scal_ciphertexts(pk, c, Mpz(m_str), randgen);
+    CL_HSMqk::CipherText res = C.scal_ciphertexts(c, Mpz(m_str));
 
     std::string res_str =  qfi_to_str(res.c1()) + ":" + qfi_to_str(res.c2());
     const char* res_char = res_str.c_str();
@@ -249,24 +235,34 @@ int main(){
     auto T = std::chrono::system_clock::now();
     seed = static_cast<unsigned long>(T.time_since_epoch().count());
     randgen.set_seed(seed);
-    auto pk =  public_key_gen_cpp("7652709523328502760619391357172525259744667175");
 
     CL_HSMqk C(generate_C());
-     std::cout << "C_m: " << C.M() << std::endl;
-    Mpz r_a(randgen.random_mpz (C.M()));
-    std::cout << "r_a: " << r_a << std::endl;
+    CL_HSMqk::SecretKey sk = C.keygen(randgen);
+    CL_HSMqk::PublicKey pk = C.keygen(sk);
+    CL_HSMqk::ClearText m1 (C, Mpz("1"));
+    CL_HSMqk::ClearText m2 (C, Mpz("3"));
+    CL_HSMqk::CipherText c1 = C.encrypt(pk, m1, randgen);
+    CL_HSMqk::CipherText c2 = C.encrypt(pk, m2, randgen);
+    CL_HSMqk::CipherText m_add = C.add_ciphertexts(pk, c1, c2, randgen);
+    CL_HSMqk::CipherText m_add_test = C.add_ciphertexts(c1, c2);
+
+    
+    auto pk_ =  public_key_gen_cpp("7652709523328502760619391357172525259744667175");
+
+    Mpz r_a(randgen.random_mpz (C.encrypt_randomness_bound()));
     Mpz r_b(randgen.random_mpz (C.encrypt_randomness_bound()));
 
-    auto cipher_a = encrypt_cpp(pk, "123", r_a.tostring().c_str());
-    auto cipher_b = encrypt_cpp(pk, "2",  r_b.tostring().c_str());
-    auto cipher_add = add_ciphertexts_cpp(pk, cipher_a, cipher_b);
-    auto cipher_scal = scal_ciphertexts_cpp(pk, cipher_a, "3");
-    auto m_add = decrypt_cpp("7652709523328502760619391357172525259744667175", cipher_add);
-    auto m_scal = decrypt_cpp("7652709523328502760619391357172525259744667175", cipher_scal);
+    auto cipher_a = encrypt_cpp(pk_, "123", r_a.tostring().c_str());
+    auto cipher_b = encrypt_cpp(pk_, "2",  r_b.tostring().c_str());
+    auto cipher_add = add_ciphertexts_cpp(cipher_a, cipher_b);
+    auto cipher_scal = scal_ciphertexts_cpp(cipher_a, "3");
+    auto m_add_cpp = decrypt_cpp("7652709523328502760619391357172525259744667175", cipher_add);
+    auto m_scal_cpp = decrypt_cpp("7652709523328502760619391357172525259744667175", cipher_scal);
 
-    std::cout << "m_add: " << m_add << std::endl;
-    std::cout << "m_scal: " << m_scal << std::endl;
-
+    std::cout << "m_add: " << m_add_cpp << std::endl;
+    std::cout << "m_scal: " << m_scal_cpp << std::endl;
+    
+    /*
     BIGNUM* m_bn = BN_new();
     BN_dec2bn(&m_bn, "123");
     BN_CTX *ctx = BN_CTX_new();
@@ -289,4 +285,5 @@ int main(){
     std::cout << "proof: " << proof << std::endl;
     auto verify = cl_ecc_verify_cpp(proof, pk, cipher_a, commit_str);
     std::cout << "verify: " << verify << std::endl;
+    */
 }
