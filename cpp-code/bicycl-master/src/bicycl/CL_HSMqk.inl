@@ -1114,9 +1114,10 @@ inline
 CL_HSMqk::CL_ECC_Proof::CL_ECC_Proof(const Mpz zm, const Mpz zr, const Mpz e) : zm_(zm), zr_(zr), e_(e) {}
 
 /* */
-std::string CL_HSMqk::CL_ECC_Proof::toString () const {
+std::string CL_HSMqk::CL_ECC_Proof::cl_ecc_toString () const {
   return zm_.tostring() + " " + zr_.tostring() + " " + e_.tostring();
 }
+
 
 std::string qfi2string(const QFI &qfi){
     auto qfi_comp = qfi.compressed_repr();
@@ -1138,6 +1139,305 @@ Mpz CL_HSMqk::CL_ECC_Proof::generate_hash (const CL_HSMqk &C,
     std::string c_str = qfi2string(c.c1()) + qfi2string(c.c2());
     auto T_str = EC_POINT_point2hex(group, T, POINT_CONVERSION_COMPRESSED, ctx);
     auto input = pk_str + c_str + T_str + qfi2string(t1) + qfi2string(t2);
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256_CTX sha256;
+    
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, input.c_str(), input.length());
+    SHA256_Final(hash, &sha256);
+    std::stringstream ss;
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+        ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
+    }
+    
+    BIGNUM *res = BN_new();
+    BN_hex2bn(&res, ss.str().c_str());
+    return Mpz (BN_bn2dec(res));
+}
+
+/* */
+inline
+CL_HSMqk::CL_CL_Proof CL_HSMqk::cl_cl_proof (const PublicKey &pk1,
+                                                            const PublicKey &pk2,
+                                                            const CipherText &c1,
+                                                            const CipherText &c2,
+                                                            const ClearText &m,
+                                                            const Mpz &r1,
+                                                            const Mpz &r2,
+                                                            RandGen &randgen)
+                                                            const
+{
+  return CL_CL_Proof (*this, pk1, pk2, c1, c2, m, r1, r2, randgen);
+}
+
+/* */
+inline
+bool CL_HSMqk::cl_cl_verify (const PublicKey &pk1,
+                                            const PublicKey &pk2,
+                                            const CipherText &c1,
+                                            const CipherText &c2,
+                                            const CL_CL_Proof &proof) const
+{
+  return proof.CL_CL_verify (*this, pk1, pk2, c1, c2);
+}
+
+/* */
+CL_HSMqk::CL_CL_Proof::CL_CL_Proof (const CL_HSMqk &C, const PublicKey &pk1, const PublicKey &pk2,
+                              const CipherText &c1, const CipherText &c2, const ClearText &m,
+                              const Mpz &r1, const Mpz &r2, RandGen &randgen)
+{
+  Mpz B (C.exponent_bound_);
+  Mpz::mul (B, B, C.fud_factor_);
+  
+  Mpz sr1 (randgen.random_mpz (B));
+  Mpz sr2 (randgen.random_mpz (B));
+  Mpz sm (randgen.random_mpz (C.M_));
+  BIGNUM* sm_bn = BN_new();
+  BN_dec2bn(&sm_bn, sm.tostring().c_str());
+
+  CipherText t1 (C.encrypt (pk1, ClearText (C, sm), sr1));
+  CipherText t2 (C.encrypt (pk2, ClearText (C, sm), sr2));
+
+  /* Generate k using hash function */
+  e_ = generate_hash (C, pk1, pk2, c1, c2, t1.c1(), t1.c2(), t2.c1(), t2.c2());
+  Mpz::mod (e_, e_, C.exponent_bound_);
+
+  Mpz::mul (zr1_, e_, r1);
+  Mpz::add (zr1_, zr1_, sr1);
+
+  Mpz::mul (zr2_, e_, r2);
+  Mpz::add (zr2_, zr2_, sr2);
+
+  Mpz::mul (zm_, e_, m);
+  Mpz::add (zm_, zm_, sm);
+  Mpz::mod (zm_, zm_, C.M_);
+}
+
+/* */
+bool CL_HSMqk::CL_CL_Proof::CL_CL_verify (const CL_HSMqk &C,
+                                    const PublicKey &pk1, const PublicKey &pk2, 
+                                    const CipherText &c1,  const CipherText &c2) const
+{
+  bool ret = true;
+
+  /* Check that pk1 is a form in G */
+  ret &= pk1.elt().discriminant() == C.Cl_G().discriminant();
+  ret &= C.genus (pk1.elt()) == CL_HSMqk::Genus ({ 1, 1 });
+
+   /* Check that pk2 is a form in G */
+  ret &= pk2.elt().discriminant() == C.Cl_G().discriminant();
+  ret &= C.genus (pk2.elt()) == CL_HSMqk::Genus ({ 1, 1 });
+
+  /* Check that c1_1 is a form in G */
+  ret &= c1.c1().discriminant() == C.Cl_G().discriminant();
+  ret &= C.genus (c1.c1()) == CL_HSMqk::Genus ({ 1, 1 });
+
+  /* Check that c1_2 */
+  ret &= c1.c2().discriminant() == C.Cl_Delta().discriminant();
+  ret &= C.genus (c1.c2()) == CL_HSMqk::Genus ({ 1, 1 });
+
+  /* Check that c2_1 is a form in G */
+  ret &= c2.c1().discriminant() == C.Cl_G().discriminant();
+  ret &= C.genus (c2.c1()) == CL_HSMqk::Genus ({ 1, 1 });
+
+  /* Check that c2_2 */
+  ret &= c2.c2().discriminant() == C.Cl_Delta().discriminant();
+  ret &= C.genus (c2.c2()) == CL_HSMqk::Genus ({ 1, 1 });
+  
+  /* Check zr1 zr2 bound */
+  Mpz B (C.fud_factor_);
+  Mpz::add (B, B, 1UL);
+  Mpz::mul (B, B, C.exponent_bound_);
+  Mpz::mul (B, B, C.exponent_bound_);
+  ret &= (zr1_.sgn() >= 0 && zr1_ <= B);
+  ret &= (zr2_.sgn() >= 0 && zr2_ <= B);
+  /* Check zm bound */
+  ret &= (zm_.sgn() >= 0 && zm_ < C.M_);
+  /* cu = (gq^zr, pk^zr f^zm) */
+  CipherText cu1 (C.encrypt (pk1, ClearText (C, zm_), zr1_));
+  CipherText cu2 (C.encrypt (pk2, ClearText (C, zm_), zr2_));
+
+  /* ck = (c1^e, c2^e) */
+  CipherText ck1 (C.scal_ciphertexts (pk1, c1, e_, Mpz (0UL)));
+  CipherText ck2 (C.scal_ciphertexts (pk2, c2, e_, Mpz (0UL)));
+
+  QFI t1_1, t1_2, t2_1, t2_2;
+
+  /* Using the equality gq^zr1 == t1_1*c1_1^e to compute t1_1 */
+  C.Cl_G().nucompinv (t1_1, cu1.c1(), ck1.c1());
+
+  /* Using the equality pk^zr1 f^zm == t1_2*c1_2^e to compute t1_2 */
+  C.Cl_Delta().nucompinv (t1_2, cu1.c2(), ck1.c2());
+
+   /* Using the equality gq^zr2 == t2_1*c2_1^e to compute t2_1 */
+  C.Cl_G().nucompinv (t2_1, cu2.c1(), ck2.c1());
+
+  /* Using the equality pk^zr2 f^zm == t2_2*c2_2^e to compute t2_2 */
+  C.Cl_Delta().nucompinv (t2_2, cu2.c2(), ck2.c2());
+
+  /* Generate e using hash function and check that it matches */
+  Mpz e (generate_hash (C, pk1, pk2, c1, c2, t1_1, t1_2, t2_1, t2_2));
+  Mpz::mod (e, e, C.exponent_bound_);
+
+  ret &= (e == e_);
+  return ret;
+}
+
+
+/* */
+inline
+CL_HSMqk::CL_CL_Proof::CL_CL_Proof(const Mpz zm, const Mpz zr1, const Mpz zr2, const Mpz e) : zm_(zm), zr1_(zr1), zr2_(zr2), e_(e) {}
+
+/* */
+std::string CL_HSMqk::CL_CL_Proof::cl_cl_toString () const {
+  return zm_.tostring() + " " + zr1_.tostring() + " " + zr2_.tostring() + " " + e_.tostring();
+}
+
+
+/* */
+inline
+Mpz CL_HSMqk::CL_CL_Proof::generate_hash (const CL_HSMqk &C,
+                                        const PublicKey &pk1, const PublicKey &pk2,
+                                        const CipherText &c1, const CipherText &c2,
+                                        const QFI &t1_1, const QFI &t1_2, const QFI &t2_1, const QFI &t2_2) const
+{
+    BN_CTX *ctx = BN_CTX_new();
+    EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
+    std::string pk1_str = qfi2string(pk1.elt()) + ":" + std::to_string(pk1.d()) + ":" + std::to_string(pk1.e()) + ":" + qfi2string(pk1.e_precomp()) + ":" + qfi2string(pk1.d_precomp()) + ":" + qfi2string(pk1.de_precomp());
+    std::string pk2_str = qfi2string(pk2.elt()) + ":" + std::to_string(pk2.d()) + ":" + std::to_string(pk2.e()) + ":" + qfi2string(pk2.e_precomp()) + ":" + qfi2string(pk2.d_precomp()) + ":" + qfi2string(pk2.de_precomp());
+    std::string c1_str = qfi2string(c1.c1()) + qfi2string(c1.c2());
+    std::string c2_str = qfi2string(c2.c1()) + qfi2string(c2.c2());
+    auto input = pk1_str + pk2_str + c1_str + c2_str + qfi2string(t1_1) + qfi2string(t1_2) + qfi2string(t2_1) + qfi2string(t2_2);
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256_CTX sha256;
+    
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, input.c_str(), input.length());
+    SHA256_Final(hash, &sha256);
+    std::stringstream ss;
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+        ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
+    }
+    
+    BIGNUM *res = BN_new();
+    BN_hex2bn(&res, ss.str().c_str());
+    return Mpz (BN_bn2dec(res));
+}
+
+/* */
+inline
+CL_HSMqk::Encrypt_Proof CL_HSMqk::encrypt_proof (const PublicKey &pk,
+                                                            const CipherText &c,
+                                                            const ClearText &m,
+                                                            const Mpz &r,
+                                                            RandGen &randgen)
+                                                            const
+{
+  return Encrypt_Proof (*this, pk, c, m, r, randgen);
+}
+
+/* */
+inline
+bool CL_HSMqk::encrypt_verify (const PublicKey &pk,
+                                            const CipherText &c,
+                                            const Encrypt_Proof &proof) const
+{
+  return proof.Encrypt_verify (*this, pk, c);
+}
+
+/* */
+CL_HSMqk::Encrypt_Proof::Encrypt_Proof (const CL_HSMqk &C, const PublicKey &pk,
+                              const CipherText &c, const ClearText &m,
+                              const Mpz &r, RandGen &randgen)
+{
+  Mpz B (C.exponent_bound_);
+  Mpz::mul (B, B, C.fud_factor_);
+  
+  Mpz sr (randgen.random_mpz (B));
+  Mpz sm (randgen.random_mpz (C.M_));
+
+  CipherText t (C.encrypt (pk, ClearText (C, sm), sr));
+
+  /* Generate k using hash function */
+  e_ = generate_hash (C, pk, c, t.c1(), t.c2());
+  Mpz::mod (e_, e_, C.exponent_bound_);
+
+  Mpz::mul (zr_, e_, r);
+  Mpz::add (zr_, zr_, sr);
+
+  Mpz::mul (zm_, e_, m);
+  Mpz::add (zm_, zm_, sm);
+  Mpz::mod (zm_, zm_, C.M_);
+}
+
+/* */
+bool CL_HSMqk::Encrypt_Proof::Encrypt_verify (const CL_HSMqk &C,
+                                    const PublicKey &pk, 
+                                    const CipherText &c) const
+{
+  bool ret = true;
+
+  /* Check that pk is a form in G */
+  ret &= pk.elt().discriminant() == C.Cl_G().discriminant();
+  ret &= C.genus (pk.elt()) == CL_HSMqk::Genus ({ 1, 1 });
+
+  /* Check that c1 is a form in G */
+  ret &= c.c1().discriminant() == C.Cl_G().discriminant();
+  ret &= C.genus (c.c1()) == CL_HSMqk::Genus ({ 1, 1 });
+
+  /* Check that c2 */
+  ret &= c.c2().discriminant() == C.Cl_Delta().discriminant();
+  ret &= C.genus (c.c2()) == CL_HSMqk::Genus ({ 1, 1 });
+  
+  /* Check zr bound */
+  Mpz B (C.fud_factor_);
+  Mpz::add (B, B, 1UL);
+  Mpz::mul (B, B, C.exponent_bound_);
+  Mpz::mul (B, B, C.exponent_bound_);
+  ret &= (zr_.sgn() >= 0 && zr_ <= B);
+  /* Check zm bound */
+  ret &= (zm_.sgn() >= 0 && zm_ < C.M_);
+  /* cu = (gq^zr, pk^zr f^zm) */
+  CipherText cu (C.encrypt (pk, ClearText (C, zm_), zr_));
+
+  /* ck = (c1^e, c2^e) */
+  CipherText ck (C.scal_ciphertexts (pk, c, e_, Mpz (0UL)));
+
+  QFI t1, t2;
+
+  /* Using the equality gq^zr == t1*c1^e to compute t1 */
+  C.Cl_G().nucompinv (t1, cu.c1(), ck.c1());
+
+  /* Using the equality pk^zr f^zm == t2*c2^e to compute t2 */
+  C.Cl_Delta().nucompinv (t2, cu.c2(), ck.c2());
+
+  /* Generate e using hash function and check that it matches */
+  Mpz e (generate_hash (C, pk, c, t1, t2));
+  Mpz::mod (e, e, C.exponent_bound_);
+
+  ret &= (e == e_);
+  return ret;
+}
+
+/* */
+inline
+CL_HSMqk::Encrypt_Proof::Encrypt_Proof(const Mpz zm, const Mpz zr, const Mpz e) : zm_(zm), zr_(zr), e_(e) {}
+/* */
+std::string CL_HSMqk::Encrypt_Proof::encrypt_toString () const {
+  return zm_.tostring() + " " + zr_.tostring() + " " + e_.tostring();
+}
+
+/* */
+inline
+Mpz CL_HSMqk::Encrypt_Proof::generate_hash (const CL_HSMqk &C,
+                                        const PublicKey &pk,
+                                        const CipherText &c,
+                                        const QFI &t1, const QFI &t2) const
+{
+    BN_CTX *ctx = BN_CTX_new();
+    std::string pk_str = qfi2string(pk.elt()) + ":" + std::to_string(pk.d()) + ":" + std::to_string(pk.e()) + ":" + qfi2string(pk.e_precomp()) + ":" + qfi2string(pk.d_precomp()) + ":" + qfi2string(pk.de_precomp());
+    std::string c_str = qfi2string(c.c1()) + qfi2string(c.c2());
+    auto input = pk_str + c_str + qfi2string(t1) + qfi2string(t2);
     unsigned char hash[SHA256_DIGEST_LENGTH];
     SHA256_CTX sha256;
     

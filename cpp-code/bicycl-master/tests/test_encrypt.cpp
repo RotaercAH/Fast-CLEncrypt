@@ -12,8 +12,12 @@ extern "C" {
     const char* decrypt_cpp(const char* sk_str, const char* cipher_str);
     const char* add_ciphertexts_cpp(const char* cipher_str_first, const char* cipher_str_second);
     const char* scal_ciphertexts_cpp(const char* cipher_str, const char* m_str);
+    const char* encrypt_prove_cpp(const char* pk_str, const char* cipher_str, const char* m_str, const char* r_str);
+    const char* encrypt_verify_cpp(const char* proof_str, const char* pk_str, const char* cipher_str);
     const char* cl_ecc_prove_cpp(const char* pk_str, const char* cipher_str, const char* commit_str, const char* m_str, const char* r_str);
     const char* cl_ecc_verify_cpp(const char* proof_str, const char* pk_str, const char* cipher_str, const char* commit_str);
+    const char* cl_cl_prove_cpp(const char* pk1_str, const char* pk2_str, const char* cipher1_str, const char* cipher2_str, const char* m_str, const char* r1_str, const char* r2_str);
+    const char* cl_cl_verify_cpp(const char* proof_str, const char* pk1_str, const char* pk2_str, const char* cipher1_str, const char* cipher2_str);
 }
 
 std::vector<std::string> splitString(const std::string& s, char delimiter) {
@@ -152,6 +156,50 @@ const char* scal_ciphertexts_cpp(const char* cipher_str, const char* m_str){
     return strdup(res_char);
 }
 
+const char* encrypt_prove_cpp(const char* pk_str, const char* cipher_str, const char* m_str, const char* r_str){
+    RandGen randgen;
+    BICYCL::Mpz seed;
+    auto T = std::chrono::system_clock::now();
+    seed = static_cast<unsigned long>(T.time_since_epoch().count());
+    randgen.set_seed(seed);
+
+    CL_HSMqk C(generate_C());
+
+    CL_HSMqk::PublicKey pk = str_to_pk(pk_str);
+
+    std::vector<std::string> cipher_vec = splitString(cipher_str, ':');
+    CL_HSMqk::CipherText c(str_to_qfi(cipher_vec[0]), str_to_qfi(cipher_vec[1]));
+
+    BICYCL::CL_HSMqk::ClearText m (C, Mpz (m_str));
+
+    auto proof =  C.encrypt_proof(pk, c, m, Mpz(r_str), randgen);
+    std::string proof_str = proof.encrypt_toString();
+    const char* proof_char = proof_str.c_str();
+    return strdup(proof_char);
+}
+
+const char* encrypt_verify_cpp(const char* proof_str, const char* pk_str, const char* cipher_str){
+
+    std::vector<std::string> proof_vec = splitString(proof_str, ' ');
+    Mpz zm(proof_vec[0]);
+    Mpz zr(proof_vec[1]);
+    Mpz e(proof_vec[2]);
+    CL_HSMqk::Encrypt_Proof proof(zm, zr, e);
+
+    CL_HSMqk C(generate_C());
+
+    CL_HSMqk::PublicKey pk = str_to_pk(pk_str);
+
+    std::vector<std::string> cipher_vec = splitString(cipher_str, ':');
+    CL_HSMqk::CipherText c(str_to_qfi(cipher_vec[0]), str_to_qfi(cipher_vec[1]));
+
+    auto verify = C.encrypt_verify(pk, c, proof);
+    const std::string res = (verify) ? "true" : "false";
+
+    const char* res_char = res.c_str();
+    return strdup(res_char);
+}
+
 const char* cl_ecc_prove_cpp(const char* pk_str, const char* cipher_str, const char* commit_str, const char* m_str, const char* r_str){
     RandGen randgen;
     BICYCL::Mpz seed;
@@ -173,7 +221,7 @@ const char* cl_ecc_prove_cpp(const char* pk_str, const char* cipher_str, const c
     BICYCL::CL_HSMqk::ClearText m (C, Mpz (m_str));
 
     auto proof =  C.cl_ecc_proof(pk, c, commit, m, Mpz(r_str), randgen);
-    std::string proof_str = proof.toString();
+    std::string proof_str = proof.cl_ecc_toString();
     const char* proof_char = proof_str.c_str();
     return strdup(proof_char);
 }
@@ -203,6 +251,58 @@ const char* cl_ecc_verify_cpp(const char* proof_str, const char* pk_str, const c
     const char* res_char = res.c_str();
     return strdup(res_char);
 }
+
+const char* cl_cl_prove_cpp(const char* pk1_str, const char* pk2_str, const char* cipher1_str, const char* cipher2_str, const char* m_str, const char* r1_str, const char* r2_str){
+    RandGen randgen;
+    BICYCL::Mpz seed;
+    auto T = std::chrono::system_clock::now();
+    seed = static_cast<unsigned long>(T.time_since_epoch().count());
+    randgen.set_seed(seed);
+
+    CL_HSMqk C(generate_C());
+
+    CL_HSMqk::PublicKey pk1 = str_to_pk(pk1_str);
+    CL_HSMqk::PublicKey pk2 = str_to_pk(pk2_str);
+
+    std::vector<std::string> cipher1_vec = splitString(cipher1_str, ':');
+    CL_HSMqk::CipherText c1(str_to_qfi(cipher1_vec[0]), str_to_qfi(cipher1_vec[1]));
+    std::vector<std::string> cipher2_vec = splitString(cipher2_str, ':');
+    CL_HSMqk::CipherText c2(str_to_qfi(cipher2_vec[0]), str_to_qfi(cipher2_vec[1]));
+
+    BICYCL::CL_HSMqk::ClearText m (C, Mpz (m_str));
+
+    auto proof =  C.cl_cl_proof(pk1, pk2, c1, c2, m, Mpz(r1_str), Mpz(r2_str), randgen);
+    std::string proof_str = proof.cl_cl_toString();
+    const char* proof_char = proof_str.c_str();
+    return strdup(proof_char);
+}
+
+const char* cl_cl_verify_cpp(const char* proof_str, const char* pk1_str, const char* pk2_str, const char* cipher1_str, const char* cipher2_str){
+
+    std::vector<std::string> proof_vec = splitString(proof_str, ' ');
+    Mpz zm(proof_vec[0]);
+    Mpz zr1(proof_vec[1]);
+    Mpz zr2(proof_vec[2]);
+    Mpz e(proof_vec[3]);
+    CL_HSMqk::CL_CL_Proof proof(zm, zr1, zr2, e);
+
+    CL_HSMqk C(generate_C());
+
+    CL_HSMqk::PublicKey pk1 = str_to_pk(pk1_str);
+    CL_HSMqk::PublicKey pk2 = str_to_pk(pk2_str);
+
+    std::vector<std::string> cipher1_vec = splitString(cipher1_str, ':');
+    CL_HSMqk::CipherText c1(str_to_qfi(cipher1_vec[0]), str_to_qfi(cipher1_vec[1]));
+    std::vector<std::string> cipher2_vec = splitString(cipher2_str, ':');
+    CL_HSMqk::CipherText c2(str_to_qfi(cipher2_vec[0]), str_to_qfi(cipher2_vec[1]));
+
+    auto verify = C.cl_cl_verify(pk1, pk2, c1, c2, proof);
+    const std::string res = (verify) ? "true" : "false";
+
+    const char* res_char = res.c_str();
+    return strdup(res_char);
+}
+
 
 void test_run_time(){
     // RandGen randgen;
@@ -237,53 +337,39 @@ int main(){
     randgen.set_seed(seed);
 
     CL_HSMqk C(generate_C());
-    CL_HSMqk::SecretKey sk = C.keygen(randgen);
-    CL_HSMqk::PublicKey pk = C.keygen(sk);
-    CL_HSMqk::ClearText m1 (C, Mpz("1"));
-    CL_HSMqk::ClearText m2 (C, Mpz("3"));
-    CL_HSMqk::CipherText c1 = C.encrypt(pk, m1, randgen);
-    CL_HSMqk::CipherText c2 = C.encrypt(pk, m2, randgen);
-    CL_HSMqk::CipherText m_add = C.add_ciphertexts(pk, c1, c2, randgen);
-    CL_HSMqk::CipherText m_add_test = C.add_ciphertexts(c1, c2);
+    // CL_HSMqk::SecretKey sk1 = C.keygen(randgen);
+    // CL_HSMqk::PublicKey pk1 = C.keygen(sk1);
+    // CL_HSMqk::SecretKey sk2 = C.keygen(randgen);
+    // CL_HSMqk::PublicKey pk2 = C.keygen(sk2);
+    // CL_HSMqk::ClearText m (C, Mpz("3"));
+    // CL_HSMqk::ClearText m_wrong (C, Mpz("10"));
+    // Mpz r1(randgen.random_mpz (C.encrypt_randomness_bound()));
+    // Mpz r2(randgen.random_mpz (C.encrypt_randomness_bound()));
+    // CL_HSMqk::CipherText c1 = C.encrypt(pk1, m, r1);
+    // CL_HSMqk::CipherText c2 = C.encrypt(pk2, m_wrong, r2);
+    // auto cl_cl_proof = C.cl_cl_proof(pk1, pk2, c1, c2, m, r1, r2, randgen);
+    // auto verify_res =  C.cl_cl_verify(pk1, pk2, c1, c2, cl_cl_proof);
+    // std::cout << "cl_cl_proof_res: " << verify_res << std::endl;
+    // auto encrypt_proof = C.encrypt_proof(pk1, c1, m, r1, randgen);
+    // auto verify_res2 = C.encrypt_verify(pk1, c2, encrypt_proof);
+    // std::cout << "encrypt_proof_res: " << verify_res2 << std::endl;
 
-    
-    auto pk_ =  public_key_gen_cpp("7652709523328502760619391357172525259744667175");
+    auto pk1 =  public_key_gen_cpp("7652709523328502760619391357172525259744667175");
+    auto pk2 =  public_key_gen_cpp("5552709673328502760619391357172525259742367166");
 
     Mpz r_a(randgen.random_mpz (C.encrypt_randomness_bound()));
     Mpz r_b(randgen.random_mpz (C.encrypt_randomness_bound()));
 
-    auto cipher_a = encrypt_cpp(pk_, "123", r_a.tostring().c_str());
-    auto cipher_b = encrypt_cpp(pk_, "2",  r_b.tostring().c_str());
-    auto cipher_add = add_ciphertexts_cpp(cipher_a, cipher_b);
-    auto cipher_scal = scal_ciphertexts_cpp(cipher_a, "3");
-    auto m_add_cpp = decrypt_cpp("7652709523328502760619391357172525259744667175", cipher_add);
-    auto m_scal_cpp = decrypt_cpp("7652709523328502760619391357172525259744667175", cipher_scal);
+    auto cipher_a = encrypt_cpp(pk1, "123", r_a.tostring().c_str());
+    auto cipher_b = encrypt_cpp(pk2, "123",  r_b.tostring().c_str());
 
-    std::cout << "m_add: " << m_add_cpp << std::endl;
-    std::cout << "m_scal: " << m_scal_cpp << std::endl;
-    
-    /*
-    BIGNUM* m_bn = BN_new();
-    BN_dec2bn(&m_bn, "123");
-    BN_CTX *ctx = BN_CTX_new();
+    auto encrypt_proof = encrypt_prove_cpp(pk1, cipher_a, "123", r_a.tostring().c_str());
+    auto encrypt_verify = encrypt_verify_cpp(encrypt_proof, pk1, cipher_a);
 
-    EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
+    std::cout << "encrypt_verify_res: " << encrypt_verify << std::endl;
 
-    const EC_POINT *G = EC_GROUP_get0_generator(group);
-    EC_POINT *commit = EC_POINT_new(group);
-    EC_POINT_mul(group, commit, NULL, G, m_bn, ctx);
-    auto commit_str =  EC_POINT_point2hex(group, commit, POINT_CONVERSION_COMPRESSED, ctx);
-    std::cout << "commit_str: " << commit_str << std::endl;
-    auto start = std::chrono::steady_clock::now();
-    for(int i = 0; i < 1000; i++){
-        auto proof_test = cl_ecc_prove_cpp(pk, cipher_a, commit_str, "123", r_a.tostring().c_str());
-    }
-    auto end = std::chrono::steady_clock::now();
-    auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout << "proof time: " << duration2 << "us" << std::endl;
-    auto proof = cl_ecc_prove_cpp(pk, cipher_a, commit_str, "123", r_a.tostring().c_str());
-    std::cout << "proof: " << proof << std::endl;
-    auto verify = cl_ecc_verify_cpp(proof, pk, cipher_a, commit_str);
-    std::cout << "verify: " << verify << std::endl;
-    */
+    auto cl_cl_proof = cl_cl_prove_cpp(pk1, pk2, cipher_a, cipher_b, "123", r_a.tostring().c_str(), r_b.tostring().c_str());
+    auto cl_cl_verify = cl_cl_verify_cpp(cl_cl_proof, pk1, pk2, cipher_a, cipher_b);
+
+     std::cout << "cl_cl_verify_res: " << cl_cl_verify << std::endl;
 }

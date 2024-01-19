@@ -289,6 +289,32 @@ namespace BICYCL
       /** Print the public parameters of the cryptosystem */
       friend std::ostream & operator<< (std::ostream &, const CL_HSMqk &);
 
+      class Encrypt_Proof
+      {
+        protected:
+          Mpz zm_;
+          Mpz zr_;
+          Mpz e_;
+
+        public:
+          Encrypt_Proof (const CL_HSMqk &C, const PublicKey &pk,
+                 const CipherText &c, const ClearText &m, const Mpz &r,
+                 RandGen &randgen);
+
+          Encrypt_Proof (const Mpz zm, const Mpz zr, const Mpz e);
+
+          bool Encrypt_verify (const CL_HSMqk &, const PublicKey &pk,
+                       const CipherText &) const;
+
+           std::string encrypt_toString() const;
+
+        protected:
+          Mpz generate_hash (const CL_HSMqk &C, const PublicKey &pk,
+                           const CipherText &c, const QFI &t1,
+                           const QFI &t2) const;
+          
+      };
+
       class CL_ECC_Proof
       {
         protected:
@@ -306,21 +332,59 @@ namespace BICYCL
           bool CL_ECC_verify (const CL_HSMqk &, const PublicKey &pk,
                        const CipherText &, const EC_POINT *commit) const;
 
-          std::string toString() const;
+          std::string cl_ecc_toString() const;
           
 
         protected:
           Mpz generate_hash (const CL_HSMqk &C, const PublicKey &pk,
                            const CipherText &c, const EC_POINT *T, const QFI &t1,
                            const QFI &t2) const;
+          
       };
 
-       /* */
-      CL_ECC_Proof cl_ecc_proof (const PublicKey &pk, const CipherText &c, const EC_POINT *commit,
-                                  const ClearText &m, const Mpz &r,
+      class CL_CL_Proof
+      {
+        protected:
+          Mpz zm_;
+          Mpz zr1_;
+          Mpz zr2_;
+          Mpz e_;
+
+        public:
+          CL_CL_Proof (const CL_HSMqk &C, const PublicKey &pk1, const PublicKey &pk2,
+                 const CipherText &c1, const CipherText &c2, const ClearText &m, const Mpz &r1, const Mpz &r2,
+                 RandGen &randgen);
+          
+          CL_CL_Proof (const Mpz zm, const Mpz zr1, const Mpz zr2, const Mpz e);
+
+          bool CL_CL_verify (const CL_HSMqk &, const PublicKey &pk1, const PublicKey &pk2,
+                       const CipherText &, const CipherText &) const;
+
+          std::string cl_cl_toString() const;
+          
+
+        protected:
+          Mpz generate_hash (const CL_HSMqk &C, const PublicKey &pk1, const PublicKey &pk2, 
+                           const CipherText &c1, const CipherText &c2, const QFI &t1_1, const QFI &t1_2, const QFI &t2_1, const QFI &t2_2) const;
+      };
+      /* */
+      Encrypt_Proof encrypt_proof (const PublicKey &pk, const CipherText &c,
+                                  const ClearText &m, const Mpz &r, RandGen &randgen) const;
+      bool encrypt_verify (const PublicKey &pk, const CipherText &c, const Encrypt_Proof &proof) const;
+
+      /* */
+      CL_ECC_Proof cl_ecc_proof (const PublicKey &pk, const CipherText &c, const EC_POINT *commit, const ClearText &m, const Mpz &r,
                                   RandGen &randgen) const;
       bool cl_ecc_verify (const PublicKey &pk, const CipherText &c, const EC_POINT *commit,
                                   const CL_ECC_Proof &proof) const;
+
+       /* */
+      CL_CL_Proof cl_cl_proof (const PublicKey &pk1, const PublicKey &pk2, const CipherText &c1, const CipherText &c2,
+                                  const ClearText &m, const Mpz &r1, const Mpz &r2,
+                                  RandGen &randgen) const;
+      bool cl_cl_verify (const PublicKey &pk1, const PublicKey &pk2, const CipherText &c1, const CipherText &c2,
+                                  const CL_CL_Proof &proof) const;
+
 
     protected:
       /* utils for ctor */

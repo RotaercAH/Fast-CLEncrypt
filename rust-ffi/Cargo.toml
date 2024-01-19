@@ -9,6 +9,9 @@ build = "build.rs"
 #libc = "0.2.151"
 libc = "0.2"
 encoding="*"
+num-bigint = "0.3"
+# num-traits = "0.2"
+
 curv = { package = "curv-kzen", git="https://github.com/ZenGo-X/curv.git", rev="44537a74"}
 [build-dependencies]
 #cc = "1.0.73"
