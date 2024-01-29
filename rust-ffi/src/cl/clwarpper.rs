@@ -21,6 +21,8 @@ extern "C" {
     pub fn cl_ecc_verify_cpp(proof_str: *const c_char, pk_str: *const c_char, cipher_str: *const c_char , commit_str: *const c_char) -> *const c_char;
     pub fn cl_cl_prove_cpp(pk1_str: *const c_char, pk2_str: *const c_char, cipher1_str: *const c_char, cipher2_str: *const c_char, m_str: *const c_char, r1_str: *const c_char, r2_str: *const c_char) -> *const c_char;
     pub fn cl_cl_verify_cpp(proof_str: *const c_char, pk1_str: *const c_char, pk2_str: *const c_char, cipher1_str: *const c_char , cipher2_str: *const c_char) -> *const c_char;
+    pub fn qfi_add_cpp(qfi1_str: *const c_char, qfi2_str: *const c_char) -> *const c_char;
+    pub fn qfi_mul_cpp(qfi_str: *const c_char, mpz_str: *const c_char) -> *const c_char;
 }
 
 pub fn c_char_decode(input: *const i8) -> String {
@@ -151,6 +153,21 @@ pub fn cl_cl_verify(proof: String, pk1: String, pk2: String, cipher1: String, ci
     }
 }
 
+pub fn qfi_add(qfi1: String, qfi2: String)-> String{
+    let qfi1_str = CString::new(qfi1).unwrap();
+    let qfi2_str= CString::new(qfi2).unwrap();
+    unsafe{
+        return c_char_decode(qfi_add_cpp(qfi1_str.as_ptr(), qfi2_str.as_ptr()));
+    }
+}
+
+pub fn qfi_mul(qfi: String, mpz: String)-> String{
+    let qfi_str = CString::new(qfi).unwrap();
+    let mpz_str= CString::new(mpz).unwrap();
+    unsafe{
+        return c_char_decode(qfi_mul_cpp(qfi_str.as_ptr(), mpz_str.as_ptr()));
+    }
+}
 
 pub fn to_hex(data : impl AsRef<[u8]>) -> String {
     let data = data.as_ref();

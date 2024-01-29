@@ -13,7 +13,7 @@ use num_bigint::BigUint;
 
 
 fn main() {
-    let g = Point::generator();
+    // let g = Point::generator();
     let message = FE::random();
     println!("message: {}", message.to_bigint().to_string());
     
@@ -34,13 +34,34 @@ fn main() {
     
     println!("十六进制字符串: {}", hex_str);
 
-    let commit = message.clone() * g;
-    let commit_str = to_hex(commit.to_bytes(true).as_ref());
+    // let commit = message.clone() * g;
+    // let commit_str = to_hex(commit.to_bytes(true).as_ref());
     let random = FE::random().to_bigint().to_string();
     println!("random: {}", random);
     let sk = FE::random().to_bigint().to_string();
+    let sk1 = FE::random();
+    println!("sk1: {}", sk1.to_bigint().to_string());
+    let sk2 = FE::random();
+    println!("sk2: {}", sk2.to_bigint().to_string());
+    let sk_total = sk1 + sk2;
+    println!("sk_total: {}", sk_total.to_bigint().to_string());
+    
     //计算公钥
-    let pk = public_key_gen(sk.clone());
+    let qfi = "184983538100188845410697144839304481634 1 -2028728280155228797 0 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
+    let mut start = Instant::now();
+    for i in 1..10000{
+        qfi_add(qfi.to_string(), qfi.to_string());
+    }
+    let mut end = Instant::now();
+    println!("cl add 10000次运行时间: {:?}", end - start);
+
+    start = Instant::now();
+    for i in 1..10000{
+        qfi_mul(qfi.to_string(), sk.clone());
+    }
+    end = Instant::now();
+    println!("cl mul 10000次运行时间: {:?}", end - start);
+    /* 
     //加密
     let cipher = encrypt(pk.clone(), message.to_bigint().to_string(), random.clone());
     //解密
@@ -154,4 +175,5 @@ fn main() {
      }
      end = Instant::now();
      println!("密文相等验证100次运行时间: {:?}", end - start);
+     */
 }
