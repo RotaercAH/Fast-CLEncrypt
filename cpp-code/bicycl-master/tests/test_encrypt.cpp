@@ -20,6 +20,10 @@ extern "C" {
     const char* cl_cl_verify_cpp(const char* proof_str, const char* pk1_str, const char* pk2_str, const char* cipher1_str, const char* cipher2_str);
     const char* qfi_add_cpp(const char* qfi1_str, char* qfi2_str);
     const char* qfi_mul_cpp(const char* qfi_str, char* mpz_str);
+    const char* power_of_h_cpp(const char* x_str);
+    const char* calculate_commit_cpp(const char* x_str, const char* delta_str);
+    const char* calculate_commitments_cpp(const char* coefficients_str, const char* delta_str);
+    const char* verify_share_cpp(const char* commitments_str, const char* secret_share_str, const char* index_str, const char* delta_str);
 }
 
 std::vector<std::string> splitString(const std::string& s, char delimiter) {
@@ -69,7 +73,7 @@ CL_HSMqk::PublicKey str_to_pk(std::string pk_str){
     CL_HSMqk::PublicKey pk(elt, d, e, e_precomp, d_precomp, de_precomp);
     return pk;
 }
-
+/*
 CL_HSMqk generate_C(){
     Mpz q_ ("115792089237316195423570985008687907852837564279074904382605163141518161494337");
     Mpz p_ ("7");
@@ -85,12 +89,13 @@ CL_HSMqk generate_C(){
     CL_HSMqk C (q_, 1, p_, fud_, M_, str_to_qfi(h_str), exponent_bound_, d, e, str_to_qfi(e_precomp_str), str_to_qfi(d_precomp_str), str_to_qfi(de_precomp_str), true, true);
     return C;
 }
-/*
+*/
 CL_HSMqk generate_C(){
     Mpz q_ ("115792089237316195423570985008687907852837564279074904382605163141518161494337");
     Mpz p_ ("7");
-    Mpz fud_ ("85070591730234615865843651857942052864");
-    // CL_HSMqk C(q_, 1, p_, fud_, true);
+    Mpz fud_ ("1099511627776");
+    // CL_HSMqk C(q_, 1, p_, true);
+    // std::cout << "fud" << C.fud_factor() <<std::endl;
     // std::cout << "M: " << C.M() << std::endl;
     // std::cout << "exponent_bound" << C.secretkey_bound() <<std::endl;
     // std::cout << "d" << C.d() <<std::endl;
@@ -100,17 +105,17 @@ CL_HSMqk generate_C(){
     // std::cout << "d_pre" << qfi_to_str(C.h_d_precomp()) <<std::endl;
     // std::cout << "de_pre" << qfi_to_str(C.h_de_precomp()) <<std::endl;
     Mpz M_ ("115792089237316195423570985008687907852837564279074904382605163141518161494337");
-    Mpz exponent_bound_ ("40219528537986012813475557315043681637296950636064091440318577873599844057088");
-    size_t d = 128;
-    size_t e = 65;
+    Mpz exponent_bound_ ("519825222697581994973081647134787959795934971297792");
+    size_t d = 85;
+    size_t e = 43;
     std::string h_str = "144981785181062899352360633526556264162 1 -3094606589199551713 0 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
-    auto e_precomp_str = "387981918959330339119301998504042175116 1 7151058272209265361 0 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
-    auto d_precomp_str =  "3201118217763513943109252430225497086 115 89241095639766715 29 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
-    auto de_precomp_str =  "47889464931934708780281035133841485103 4 -885674612390537642 3 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
+    auto e_precomp_str = "29430119204407461226734121732711590338 1 1396069299632702381 0 true -810544624661213367964996895060815354969862949953524330678236141990627130460359";
+    auto d_precomp_str =  "77604097034434070520838802221803506438 1 113927739220299871 0 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
+    auto de_precomp_str =  "3201118217763513943109252430225497086 115 89241095639766715 29 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
     CL_HSMqk C (q_, 1, p_, fud_, M_, str_to_qfi(h_str), exponent_bound_, d, e, str_to_qfi(e_precomp_str), str_to_qfi(d_precomp_str), str_to_qfi(de_precomp_str), true, true);
     return C;
 }
-*/
+
 const char* public_key_gen_cpp(const char* sk_str){
     CL_HSMqk C = generate_C();
    
@@ -398,6 +403,70 @@ const char* qfi_mul_cpp(const char* qfi_str, char* mpz_str){
     return strdup(res_char);
 }
 
+const char* power_of_h_cpp(const char* x_str){
+    CL_HSMqk C(generate_C());
+    QFI res;
+    C.power_of_h (res, Mpz(x_str)); /* res = h^x */
+    std::string res_str =  qfi_to_str(res);
+    const char* res_char = res_str.c_str();
+    return strdup(res_char);
+}
+
+const char* calculate_commit_cpp(const char* x_str, const char* delta_str){
+    CL_HSMqk C(generate_C());
+    QFI res;
+    C.power_of_h (res, Mpz(x_str)); /* res = h^x */
+    C.Cl_G().nupow (res, res, Mpz(delta_str)); /* res = h^（x * delta）*/
+    std::string res_str =  qfi_to_str(res);
+    const char* res_char = res_str.c_str();
+    return strdup(res_char);
+}
+
+const char* calculate_commitments_cpp(const char* coefficients_str, const char* delta_str){
+    CL_HSMqk C(generate_C());
+    std::vector<std::string> coefficients_vec = splitString(coefficients_str, ':');
+    std::string res_str = "";
+    for(int i = 0; i < coefficients_vec.size(); i++){
+        QFI commit;
+        C.power_of_h (commit, Mpz(coefficients_vec[i])); /* res = h^x */
+        C.Cl_G().nupow (commit, commit, Mpz(delta_str)); /* res = h^（x * delta）*/
+        res_str += qfi_to_str(commit);
+        if(i != coefficients_vec.size() - 1)
+            res_str += ":";
+    }
+    const char* res_char = res_str.c_str();
+    return strdup(res_char);
+}
+
+const char* verify_share_cpp(const char* commitments_str, const char* secret_share_str, const char* index_str, const char* delta_str){
+    CL_HSMqk C(generate_C());
+    QFI lift, right;
+    /* lift = h^(yi * delta)*/
+    C.power_of_h (lift, Mpz(secret_share_str));
+    C.Cl_G().nupow (lift, lift, Mpz(delta_str)); 
+    /* right = c0 ^ (delta * delta) + ck ^ ik */
+    std::vector<std::string> commitments_vec = splitString(commitments_str, ':');
+    C.Cl_G().nupow (right, str_to_qfi(commitments_vec[0]), Mpz(delta_str));
+    C.Cl_G().nupow (right, right, Mpz(delta_str));
+    Mpz index_pow_k(index_str);
+    for(int k = 1; k < commitments_vec.size(); k++){
+        QFI temp;
+        C.Cl_G().nupow (temp, str_to_qfi(commitments_vec[k]), index_pow_k);
+        C.Cl_G().nucomp(right, right, temp);
+        Mpz::mul(index_pow_k, index_pow_k, Mpz(index_str));
+    }
+    std::string res_str = "";
+    
+    if(lift == right){
+        res_str = "true";
+    }else{
+        res_str = "false";
+    }
+    const char* res_char = res_str.c_str();
+    return strdup(res_char);
+
+}
+
 void test_run_time(){
     // RandGen randgen;
     // BICYCL::Mpz seed;
@@ -549,71 +618,66 @@ void multi_test(){
 
     CL_HSMqk C(generate_C());
 
-    // order 40219528537986012813475557315043681637296950636064091440318577873599844057088
-    auto sk1_test = "72048742277494395339533061984139355904610663484117275638395963297495883454538";
-    Mpz sk1 ("72048742277494395339533061984139355904610663484117275638395963297495883454538");
-    sk1.mod(sk1, sk1, C.encrypt_randomness_bound());
-    // 31829213739508382526057504669095674267313712848053184198077385423896039397450
+    Mpz sk1(randgen.random_mpz (C.encrypt_randomness_bound()));
+    // Mpz sk1("186882519372929138433388409071178935994636190150762");
     std::cout << "sk1 in test: " << sk1 << std::endl;
 
-    auto sk2_test = "70795547422516615862889718024772333991937014393068567817406786413659743186496";
-    Mpz sk2 ("70795547422516615862889718024772333991937014393068567817406786413659743186496");
-    Mpz::mod(sk2, sk2, C.encrypt_randomness_bound());
+    Mpz sk2(randgen.random_mpz (C.encrypt_randomness_bound()));
+    // Mpz sk2("270863638985912834378120610705097301040562656023341");
     std::cout << "sk2 in test: " << sk2 << std::endl;
-    // 30576018884530603049414160709728652354640063757004476377088208540059899129408
-    Mpz total;
-    Mpz::add(total, sk1, sk2);
-    Mpz::mod(total, total, C.encrypt_randomness_bound());
-    // 22185704086052972761996108063780644984656825968993569134847016090356094469770
-    std::cout << "total in test: " << total << std::endl;
-    auto sk_total = "27052200462694815778851795000223782043710113598110939073197586569637465146697";
-    Mpz sk_add ("22185704086052972761996108063780644984656825968993569134847016090356094469770");
-    sk_add.mod(sk_add, sk_add, C.encrypt_randomness_bound());
+    Mpz sk_add;
+    Mpz::add(sk_add, sk1, sk2);
     std::cout << "sk_add in test: " << sk_add << std::endl;
 
-    auto pk_test = public_key_gen_cpp("27052200462694815778851795000223782043710113598110939073197586569637465146697");
+    // Mpz sk_mpz("457746158358841972811509019776276237035198846174103");
+    Mpz mod;
+    Mpz::add(mod ,C.encrypt_randomness_bound(), 1);
+    std::cout << "mod: " << mod << std::endl;
+
+    Mpz sk_add_;
+    // Mpz::mod(sk_add_, sk_add, mod);
+    Mpz::mod(sk_add_, sk_add, C.encrypt_randomness_bound());
+    std::cout << "sk_add_ in test: " << sk_add_ << std::endl;
+
+    CL_HSMqk::SecretKey sk = C.keygen(sk_add_);
+    CL_HSMqk::PublicKey pk = C.keygen(sk);
+    Mpz m ("72048742277494395339533061984139355904610663484117275638395963297495883454538");
     Mpz r(randgen.random_mpz (C.encrypt_randomness_bound()));
-    auto cipher_str = encrypt_cpp(pk_test, "123", r.tostring().c_str());
-    std::vector<std::string> cipher_vec = splitString(cipher_str, ':');
-    auto c1 = str_to_qfi(cipher_vec[0]);
-    auto c2 = str_to_qfi(cipher_vec[1]);
 
-    QFI c1_pow_sk, c1_pow_sk_, c1_1_pow_sk, c1_2_pow_sk, order;
-    C.Cl_G().nupow (c1_pow_sk, c1, Mpz (sk_total));
-    std::cout << "c1_pow_sk in test: " << c1_pow_sk << std::endl;
-    std::cout << "c1_pow_sk in test: " << qfi_to_str(c1_pow_sk) << std::endl;
-    //利用两个私钥计算
-    C.Cl_G().nupow (c1_1_pow_sk, c1, sk1);
-    C.Cl_G().nupow (c1_2_pow_sk, c1, sk2);
-    C.Cl_G().nupow (order, c1, C.encrypt_randomness_bound());
-    C.Cl_G().nucomp (c1_pow_sk_, c1_1_pow_sk, c1_2_pow_sk);
-    C.Cl_G().nucompinv(c1_pow_sk_, c1_pow_sk_, order);
-    // c1_pow_sk.to_maximal_order (Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"), C.DeltaK(), true);
-    // c1_pow_sk_.to_maximal_order (Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"), C.DeltaK(), true);
-    std::cout << "c1_pow_sk in test: " << c1_pow_sk_ << std::endl;
-    std::cout << "c1_pow_sk_ in test: " << qfi_to_str(c1_pow_sk_) << std::endl;
-
-    QFI fm = c1_pow_sk;
-    QFI fm_ = c1_pow_sk_;
+    QFI c1, c2;
+    //加密m
+    C.power_of_h (c1, r); /* c1 = h^r */
+    QFI fm = C.power_of_f (m); /* fm = [q^2, q, ...]^m */
+    pk.exponentiation (C, c2, r); /* pk^r */
 
     if (C.compact_variant())
     {
-        C.from_Cl_DeltaK_to_Cl_Delta (fm);
+        C.from_Cl_DeltaK_to_Cl_Delta (c2);
+    }
+    C.Cl_Delta().nucomp (c2, c2, fm); /* c2 = f^m*pk^r */
+
+    QFI c1_1, c1_2, c1_add;
+
+    // c1_1 = h^（r * sk1）
+    C.Cl_G().nupow (c1_1, c1, sk1); 
+
+    // c1_2 = h^（r * sk2）
+    C.Cl_G().nupow (c1_2, c1, sk2); 
+
+    // c1_add = h ^ r (sk1 + sk2）
+    C.Cl_G().nucomp (c1_add, c1_1, c1_2);
+
+    //解密
+    QFI fm_ = c1_add;
+    if (C.compact_variant())
+    {
         C.from_Cl_DeltaK_to_Cl_Delta (fm_);
     }
    
-    C.Cl_Delta().nucompinv (fm, c2, fm); /* c2/c1^sk */
     C.Cl_Delta().nucompinv (fm_, c2, fm_); /* c2/c1^sk */
 
-    std::cout << "fm in test: " << fm << std::endl;
-    std::cout << "fm in test in test: " << qfi_to_str(fm) << std::endl;
-    std::cout << "fm_ in test: " << fm_ << std::endl;
-    std::cout << "fm in test_ in test: " << qfi_to_str(fm_) << std::endl;
-
-    Mpz m = C.dlog_in_F(fm);
     Mpz m_ = C.dlog_in_F(fm_);
-
-    std::cout << "m in test: " << m << std::endl;
+    std::cout << "m: " << m_ << std::endl;
 }
 
 void test_encrypt_and_decrypt(){
@@ -633,12 +697,13 @@ void test_encrypt_and_decrypt(){
 }
 
 int main(){
-    // multi_test();
+    multi_test();
     // test_run_time();
     // test_encrypt_and_decrypt();
     // add_test()
     // test_vss();
-    test_mpz_vss();
+    // test_mpz_vss();
+    multi_test();
     RandGen randgen;
     BICYCL::Mpz seed;
     auto T = std::chrono::system_clock::now();
@@ -650,6 +715,7 @@ int main(){
     CL_HSMqk::SecretKey sk2 = C.keygen(randgen);
     CL_HSMqk::PublicKey pk2 = C.keygen(sk2);
     CL_HSMqk::ClearText m (C, Mpz("3"));
+    std::cout << "C.encrypt_randomness_bound(): " << C.encrypt_randomness_bound() << std::endl;
     Mpz r1(randgen.random_mpz (C.encrypt_randomness_bound()));
     Mpz r2(randgen.random_mpz (C.encrypt_randomness_bound()));
     CL_HSMqk::CipherText c1 = C.encrypt(pk1, m, r1);
@@ -660,7 +726,8 @@ int main(){
     // auto encrypt_proof = C.encrypt_proof(pk1, c1, m, r1, randgen);
     // auto verify_res2 = C.encrypt_verify(pk1, c2, encrypt_proof);
     // std::cout << "encrypt_proof_res: " << verify_res2 << std::endl;
-
+    // 验证gp^r1 * gp^r2 = gp^r  其中 r = r1 + r2
+    QFI gp_r1, gp_r2, gp_r, gp_r_, order, order_add, G_add, DeltaK_add;
     // C.power_of_h (gp_r1, Mpz("72048742277494395339533061984139355904610663484117275638395963297495883454538"));
     // C.power_of_h (gp_r2, Mpz("70795547422516615862889718024772333991937014393068567817406786413659743186496"));
     // // std::cout << "gp_r1: " << qfi_to_str(gp_r1) << std::endl;
@@ -668,46 +735,6 @@ int main(){
     // C.power_of_h (gp_r, Mpz("27052200462694815778851795000223782043710113598110939073197586569637465146697"));
     // C.power_of_h (order, Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"));
 
-    // 验证gp^r1 * gp^r2 = gp^r  其中 r = r1 + r2
-    QFI gp_r1, gp_r2, gp_r, gp_r_, order, order_add, G_add, DeltaK_add;
-    C.power_of_h (gp_r1, Mpz("72048742277494395339533061984139355904610663484117275638395963297495883454538"));
-    std::cout << "gp_r1 初始: " << qfi_to_str(gp_r1) << std::endl;
-    C.power_of_h (gp_r2, Mpz("70795547422516615862889718024772333991937014393068567817406786413659743186496"));
-    // std::cout << "gp_r1: " << qfi_to_str(gp_r1) << std::endl;
-    // std::cout << "gp_r2: " << qfi_to_str(gp_r2) << std::endl;
-    C.power_of_h (gp_r, Mpz("27052200462694815778851795000223782043710113598110939073197586569637465146697"));
-    C.power_of_h (order, Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"));
-    auto start = std::chrono::steady_clock::now();
-    for(int i = 0; i < 10000; i++){
-        CL_HSMqk C(generate_C());
-        QFI res;
-        C.Cl_G().nucomp (gp_r1, gp_r1, gp_r1);
-        std::string res_str =  qfi_to_str(res);
-        const char* res_char = res_str.c_str();
-        strdup(res_char); 
-    }
-    auto end = std::chrono::steady_clock::now();
-    auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout << "qfi add cpp time: " << duration2 << "us" << std::endl;
-    start = std::chrono::steady_clock::now();
-    for(int i = 0; i < 10000; i++){
-        CL_HSMqk C(generate_C());
-        QFI res;
-        C.Cl_G().nupow (gp_r1, gp_r1, Mpz("72048742277494395339533061984139355904610663484117275638395963297495883454538"));
-        std::string res_str =  qfi_to_str(res);
-        const char* res_char = res_str.c_str();
-        strdup(res_char); 
-        
-    }
-    end = std::chrono::steady_clock::now();
-    duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout << "qfi mul cpp time: " << duration2 << "us" << std::endl;
-    // C.power_of_h (gp_r1, Mpz("31829213739508382526057504669095674267313712848053184198077385423896039397450"));
-    // C.power_of_h (gp_r2, Mpz("30576018884530603049414160709728652354640063757004476377088208540059899129408"));
-    // // std::cout << "gp_r1: " << qfi_to_str(gp_r1) << std::endl;
-    // // std::cout << "gp_r2: " << qfi_to_str(gp_r2) << std::endl;
-    // C.power_of_h (gp_r, Mpz("22185704086052972761996108063780644984656825968993569134847016090356094469770"));
-    // C.power_of_h (order, Mpz("40219528537986012813475557315043681637296950636064091440318577873599844057088"));
     // C.Cl_G().nucomp (G_add, gp_r1, gp_r2);
     // C.Cl_G().nucomp (DeltaK_add, gp_r1, gp_r2);
     // std::cout << "G_add: " << qfi_to_str(G_add) << std::endl;
@@ -717,30 +744,11 @@ int main(){
     C.from_Cl_DeltaK_to_Cl_Delta (gp_r2);
     std::cout << "gp_r1: " << qfi_to_str(gp_r1) << std::endl;
     std::cout << "gp_r2: " << qfi_to_str(gp_r2) << std::endl;
-    C.Cl_Delta().nucomp (gp_r_, gp_r1, gp_r2);
-    // gp_r_.to_maximal_order (Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"), C.DeltaK());
-    // gp_r_.to_maximal_order (Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"), C.DeltaK());
-    // gp_r.to_maximal_order (Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"), C.DeltaK());
-    // gp_r_.lift(Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"));
-    // gp_r.lift(Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"));
-    // C.Cl_DeltaK().nupow(gp_r_, gp_r_, Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"));
-    // C.Cl_DeltaK().nupow(gp_r, gp_r, Mpz("115792089237316195423570985008687907852837564279074904382605163141518161494337"));
-    // C.Cl_G().nucompinv (gp_r_, gp_r_, order);
-    // C.Cl_DeltaK().nucomp(gp_r_, gp_r1, gp_r2);
-    // CL_q.nucomp(gp_r_, gp_r1, gp_r2);
-    // C.Cl_G().nucomp (order_add, order, gp_r);
-    // C.Cl_G().nupow (gp_r_, gp_r_, Mpz("1"));
     C.from_Cl_DeltaK_to_Cl_Delta (gp_r);
     std::cout << "gp_r: " << qfi_to_str(gp_r) << std::endl;
     std::cout << "gp_r_: " << qfi_to_str(gp_r_) << std::endl;
     // // std::cout << "order_add: " << qfi_to_str(order_add) << std::endl;
 
-    // std::cout << "G_class_number_bound: " << C.Cl_G().class_number_bound() << std::endl;
-    // std::cout << "G_default_nucomp_bound: " << C.Cl_G().default_nucomp_bound() << std::endl;
-    // std::cout << "Delta_class_number_bound: " << C.Cl_Delta().class_number_bound() << std::endl;
-    // std::cout << "Delta_default_nucomp_bound: " << C.Cl_Delta().default_nucomp_bound() << std::endl;
-    // std::cout << "DeltaK_class_number_bound: " << C.Cl_DeltaK().class_number_bound() << std::endl;
-    // std::cout << "DeltaK_default_nucomp_bound: " << C.Cl_DeltaK().default_nucomp_bound() << std::endl;
     // Mpz r(randgen.random_mpz (C.encrypt_randomness_bound()));
     // Mpz m1("72048742277494395339533061984139355904610663484117275638395963297495883454538");
     // Mpz m2("70795547422516615862889718024772333991937014393068567817406786413659743186496");

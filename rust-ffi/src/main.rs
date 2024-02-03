@@ -8,6 +8,7 @@ use curv::BigInt;
 pub type CU = Secp256k1;
 pub type FE = Scalar<Secp256k1>;
 pub type GE = Point<Secp256k1>;
+use encoding::codec::utf_16::Big;
 use num_bigint::BigUint;
 // use num_traits::Num;
 
