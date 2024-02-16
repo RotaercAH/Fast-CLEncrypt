@@ -62,6 +62,8 @@ namespace BICYCL
         /* constructors */
         CL_HSM_PublicKey (const Cryptosystem &,
                           const CL_HSM_SecretKey<Cryptosystem> &);
+        CL_HSM_PublicKey (const Cryptosystem &C,
+                          const QFI &);
         CL_HSM_PublicKey (const QFI &, size_t, size_t, const QFI &, 
                           const QFI &, const QFI &);
 

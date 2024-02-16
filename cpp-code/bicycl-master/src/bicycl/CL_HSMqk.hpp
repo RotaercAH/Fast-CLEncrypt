@@ -256,6 +256,8 @@ namespace BICYCL
       SecretKey keygen (RandGen &randgen) const;
       /** Compute the public key associated to a secret key */
       PublicKey keygen (const SecretKey &sk) const;
+      /** Pre compute the public key associated to a public key(QFI) */
+      PublicKey keygen (const QFI &pk) const;
       /** Encrypt @p m using public key @p pk */
       CipherText encrypt (const PublicKey &pk, const ClearText &m,
                           RandGen &randgen) const;
@@ -342,30 +344,28 @@ namespace BICYCL
           
       };
 
-      class CL_CL_Proof
+      class CL_Enc_Com_Proof
       {
         protected:
           Mpz zm_;
-          Mpz zr1_;
-          Mpz zr2_;
+          Mpz zr_;
           Mpz e_;
 
         public:
-          CL_CL_Proof (const CL_HSMqk &C, const PublicKey &pk1, const PublicKey &pk2,
-                 const CipherText &c1, const CipherText &c2, const ClearText &m, const Mpz &r1, const Mpz &r2,
+          CL_Enc_Com_Proof (const CL_HSMqk &C, const CL_HSMqk &C_dkg, const PublicKey &pk, 
+                 const CipherText &c, const QFI &com, const ClearText &m, const Mpz &r,
                  RandGen &randgen);
           
-          CL_CL_Proof (const Mpz zm, const Mpz zr1, const Mpz zr2, const Mpz e);
+          CL_Enc_Com_Proof (const Mpz zm, const Mpz zr, const Mpz e);
 
-          bool CL_CL_verify (const CL_HSMqk &, const PublicKey &pk1, const PublicKey &pk2,
-                       const CipherText &, const CipherText &) const;
+          bool CL_Enc_Com_verify (const CL_HSMqk &, const CL_HSMqk &, const PublicKey &pk,
+                       const CipherText &, const QFI &) const;
 
-          std::string cl_cl_toString() const;
-          
+          std::string cl_enc_com_toString() const;
 
         protected:
-          Mpz generate_hash (const CL_HSMqk &C, const PublicKey &pk1, const PublicKey &pk2, 
-                           const CipherText &c1, const CipherText &c2, const QFI &t1_1, const QFI &t1_2, const QFI &t2_1, const QFI &t2_2) const;
+          Mpz generate_hash (const CL_HSMqk &C, const PublicKey &pk,
+                           const CipherText &c, const QFI &com, const QFI &t1_1, const QFI &t1_2, const QFI &T) const;
       };
       /* */
       Encrypt_Proof encrypt_proof (const PublicKey &pk, const CipherText &c,
@@ -379,12 +379,11 @@ namespace BICYCL
                                   const CL_ECC_Proof &proof) const;
 
        /* */
-      CL_CL_Proof cl_cl_proof (const PublicKey &pk1, const PublicKey &pk2, const CipherText &c1, const CipherText &c2,
-                                  const ClearText &m, const Mpz &r1, const Mpz &r2,
+      CL_Enc_Com_Proof cl_enc_com_proof (const CL_HSMqk &C_dkg, const PublicKey &pk, const CipherText &c, const QFI &com,
+                                  const ClearText &m, const Mpz &r,
                                   RandGen &randgen) const;
-      bool cl_cl_verify (const PublicKey &pk1, const PublicKey &pk2, const CipherText &c1, const CipherText &c2,
-                                  const CL_CL_Proof &proof) const;
-
+      bool cl_enc_com_verify (const CL_HSMqk &C_dkg, const PublicKey &pk, const CipherText &c, const QFI &com,
+                                  const CL_Enc_Com_Proof &proof) const;
 
     protected:
       /* utils for ctor */

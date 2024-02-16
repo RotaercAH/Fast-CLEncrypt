@@ -66,6 +66,26 @@ CL_HSM_PublicKey<Cryptosystem>::CL_HSM_PublicKey (const Cryptosystem &C,
 /* */
 template <class Cryptosystem>
 inline
+CL_HSM_PublicKey<Cryptosystem>::CL_HSM_PublicKey (const Cryptosystem &C,
+                                      const QFI &pk) : pk_(pk)
+{
+  d_ = (C.encrypt_randomness_bound().nbits () + 1)/2;
+  e_ = d_/2 + 1;
+
+  pk_de_precomp_ = pk_;
+  for (size_t i = 0; i < d_+e_; i++)
+  {
+    if (i == e_)
+      pk_e_precomp_ = pk_de_precomp_;
+    if (i == d_)
+      pk_d_precomp_ = pk_de_precomp_;
+    C.Cl_G().nudupl (pk_de_precomp_, pk_de_precomp_);
+  }
+}
+
+/* */
+template <class Cryptosystem>
+inline
 CL_HSM_PublicKey<Cryptosystem>::CL_HSM_PublicKey (const QFI &pk, 
                                                   size_t d, 
                                                   size_t e, 

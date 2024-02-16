@@ -48,21 +48,8 @@ fn main() {
     println!("sk_total: {}", sk_total.to_bigint().to_string());
     
     //计算公钥
-    let qfi = "184983538100188845410697144839304481634 1 -2028728280155228797 0 false -810544624661213367964996895060815354969862949953524330678236141990627130460359";
-    let mut start = Instant::now();
-    for i in 1..10000{
-        qfi_add(qfi.to_string(), qfi.to_string());
-    }
-    let mut end = Instant::now();
-    println!("cl add 10000次运行时间: {:?}", end - start);
-
-    start = Instant::now();
-    for i in 1..10000{
-        qfi_mul(qfi.to_string(), sk.clone());
-    }
-    end = Instant::now();
-    println!("cl mul 10000次运行时间: {:?}", end - start);
-    /* 
+    let pk = public_key_gen(sk.clone());
+    println!("sk_total: {}", sk_total.to_bigint().to_string());
     //加密
     let cipher = encrypt(pk.clone(), message.to_bigint().to_string(), random.clone());
     //解密
@@ -78,25 +65,6 @@ fn main() {
     let cipher_scal = scal_ciphertexts( cipher1.clone(), "3".to_string());
     let m_scal = decrypt(sk.clone(), cipher_scal.clone());
     println!("scal: {}", m_scal);
-    //加密正确零知识证明
-    let encrypt_proof = encrypt_prove(pk.clone(), cipher.clone(), message.to_bigint().to_string(), random.clone());
-    //加密正确验证
-    let res1 = encrypt_verify(encrypt_proof.clone(), pk.clone(), cipher.clone());
-    println!("encrypt verify res: {}", res1);
-    //密文承诺零知识证明
-    let cl_ecc_proof = cl_ecc_prove(pk.clone(), cipher.clone(), commit_str.clone(), message.to_bigint().to_string(), random.clone());
-    //密文承诺验证
-    let res2 = cl_ecc_verify(cl_ecc_proof.clone(), pk.clone(), cipher.clone(), commit_str.clone());
-    println!("cl ecc verify res: {}", res2);
-    //密文相等零知识证明
-    let sk_ = FE::random().to_bigint().to_string();
-    let pk_ = public_key_gen(sk_.clone());
-    let random_ = FE::random().to_bigint().to_string();
-    let cipher_ = encrypt(pk_.clone(), message.to_bigint().to_string(), random_.clone());
-    let cl_cl_proof = cl_cl_prove(pk.clone(), pk_.clone(), cipher.clone(), cipher_.clone(),message.to_bigint().to_string(), random.clone(), random_.clone());
-    //密文相等验证
-    let res3 = cl_cl_verify(cl_cl_proof.clone(), pk.clone(), pk_.clone(),cipher.clone(), cipher_.clone());
-    println!("cl ecc verify res: {}", res3);
     //公钥生成效率
     let mut start = Instant::now();
     for i in 1..100{
@@ -129,52 +97,12 @@ fn main() {
     end = Instant::now();
     println!("同态加法100次运行时间: {:?}", end - start);
 
-    //加密正确零知识证明效率
+    //同态乘法效率
     start = Instant::now();
     for i in 1..100{
-        encrypt_prove(pk.clone(), cipher.clone(), message.to_bigint().to_string(), random.clone());
+        let cipher_scal = scal_ciphertexts( cipher1.clone(), "3".to_string());
     }
     end = Instant::now();
-    println!("加密正确证明100次运行时间: {:?}", end - start);
+    println!("同态乘法100次运行时间: {:?}", end - start);
 
-    //加密正确零知识证明验证效率
-    start = Instant::now();
-    for i in 1..100{
-        encrypt_verify(encrypt_proof.clone(), pk.clone(), cipher.clone());
-    }
-    end = Instant::now();
-    println!("加密正确验证100次运行时间: {:?}", end - start);
-
-    //加密承诺零知识证明效率
-    start = Instant::now();
-    for i in 1..100{
-       cl_ecc_prove(pk.clone(), cipher.clone(), commit_str.clone(), message.to_bigint().to_string(), random.to_string());
-    }
-    end = Instant::now();
-    println!("加密承诺证明100次运行时间: {:?}", end - start);
-
-    //加密承诺零知识证明验证效率
-    start = Instant::now();
-    for i in 1..100{
-        cl_ecc_verify(cl_ecc_proof.clone(), pk.clone(), cipher.clone(), commit_str.clone());
-    }
-    end = Instant::now();
-    println!("加密承诺验证100次运行时间: {:?}", end - start);
-
-     //密文相等零知识证明效率
-     start = Instant::now();
-     for i in 1..100{
-        cl_cl_prove(pk.clone(), pk_.clone(), cipher.clone(), cipher_.clone(),message.to_bigint().to_string(), random.clone(), random_.clone());
-     }
-     end = Instant::now();
-     println!("密文相等证明100次运行时间: {:?}", end - start);
- 
-     //密文相等零知识证明验证效率
-     start = Instant::now();
-     for i in 1..100{
-        cl_cl_verify(cl_cl_proof.clone(), pk.clone(), pk_.clone(),cipher.clone(), cipher_.clone());
-     }
-     end = Instant::now();
-     println!("密文相等验证100次运行时间: {:?}", end - start);
-     */
 }
